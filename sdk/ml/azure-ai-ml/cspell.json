@@ -1,5 +1,9 @@
 {
   "version": "0.2",
+  "ignorePaths": [
+    "docs/swagger-local/**",
+    "docs/swagger-remote/**"
+  ],
   "ignoreWords": [
     "FAISS",
     "Faiss",
