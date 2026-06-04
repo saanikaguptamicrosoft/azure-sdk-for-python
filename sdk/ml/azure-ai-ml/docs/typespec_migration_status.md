@@ -3,12 +3,6 @@
 Per-version migration status for `azure-ai-ml`. Versions and scope decisions come from [typespec_migration_per_version_analysis.md](typespec_migration_per_version_analysis.md).
 
 **Status legend**
-- `Not started` — no work begun
-- `Blocked` — needs service-team input (Fareed) on local-vs-remote swagger delta
-- `Ready` — TSP can be generated from upstream; SDK migration not yet started
-- `In PR` — PR open, awaiting review / pipeline
-- `Merged - test pending` — PR merged; downstream test pass not yet verified
-- `Merged` — PR merged and tests green
 
 | # | API version | Status | PR link | Comment | Test links |
 |---|---|---|---|---|---|
