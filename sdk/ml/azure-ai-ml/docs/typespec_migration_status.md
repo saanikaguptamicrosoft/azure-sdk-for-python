@@ -18,6 +18,6 @@ Per-version migration status for `azure-ai-ml`. Versions and scope decisions com
 | 10 | 2023-08-01-preview | Not Started | — | TSP required ||
 | 11 | 2024-01-01-preview | Not Started | — | TSP required ||
 | 12 | 2024-04-01-preview | Blocked | — | TSP required and delta changes exist, need Fareed's inputs ||
-| 13 | 2024-07-01-preview | Check 14 | https://github.com/Azure/azure-sdk-for-python/pull/47349 | Converged into 2024-10-01-preview ||
-| 14 | 2024-10-01-preview | In PR | https://github.com/Azure/azure-sdk-for-python/pull/47349 | TSP was present |https://github.com/Azure/azureml-examples/pull/3997 (refer [main](https://github.com/Azure/azureml-examples/pull/3995))|
+| 13 | 2024-07-01-preview | ✅ | https://github.com/Azure/azure-sdk-for-python/pull/47349 | Converged into 2024-10-01-preview ||
+| 14 | 2024-10-01-preview | ✅ | https://github.com/Azure/azure-sdk-for-python/pull/47349 | TSP was present |https://github.com/Azure/azureml-examples/pull/3997 (refer [main](https://github.com/Azure/azureml-examples/pull/3995))|
 | 15 | 2025-01-01-preview | Not Started | — | TSP required ||
