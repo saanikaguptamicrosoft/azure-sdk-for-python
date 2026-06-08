@@ -13,7 +13,7 @@ Row numbers `1-15` correspond to the table in [typespec_migration_per_version_an
 | 3 | `2022-01-01-preview` | 🟦 Delta — awaiting Fareed | TSP compiles 0 errors. SDK consumes local-only `WorkspaceConnectionPropertiesV2` + 7 auth subclasses + 5 credential POCOs via `entities/_credentials.py`. Needs service-team decision on whether to back-port these into the TSP or refactor SDK onto a newer version's connection types. |
 | 4 | `2022-02-01-preview` | ✅ Unblocked | 0 errors — ready to copy upstream |
 | 5 | `2022-10-01-preview` | 🟦 Delta — awaiting Fareed | TSP compiles 0 errors. SDK consumes local-only `UserCreatedAcrAccount` + `UserCreatedStorageAccount` (back-ported into registries.json). Needs service-team decision on whether to upstream these into the TSP. |
-| 6 | `2022-12-01-preview` | Blocked on 5th | To be converged into 5th API version |
+| 6 | `2022-12-01-preview` | 🟦 Blocked on 5th | To be converged into 5th API version |
 | 7 | `2023-02-01-preview` | ✅ Unblocked | 0 errors — ready to copy upstream |
 | 8 | `2023-04-01-preview` | 🟡 Blocked | 2 errors — `invalid-discriminator-value: "uri_folder"` collision. Two siblings of `DataVersionBaseProperties` declare the same `dataType: "uri_folder"`: `DataImport` and `UriFolderDataVersion`. Real swagger-side issue. Options for Kashif: (a) upstream swagger rename one discriminator, (b) TSP-level discriminator override, (c) omit `DataImport` from this older TSP if not SDK-imported. |
 | 9 | `2023-06-01-preview` | 🟡 Blocked | 2 errors — same `uri_folder` discriminator collision as row 8. |
