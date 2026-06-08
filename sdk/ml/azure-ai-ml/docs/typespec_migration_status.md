@@ -1,15 +1,5 @@
 # TypeSpec Migration — Status Tracker
 
-Per-version migration status for `azure-ai-ml`. Versions and scope decisions come from [typespec_migration_per_version_analysis.md](typespec_migration_per_version_analysis.md).
-
-**Status legend:** ✅ Unblocked · 🔴 Blocked · ⬜ Merged · ⚪ Not Started
-
-A row is **Blocked** only when the TSP cannot be used to generate a client the SDK can actually consume. Two blocker classes are called out in the Comment column: **delta issue** (SDK depends on types not present in the standard TSP — needs service-team input) and **TSP generation issue** (TSP cannot be made wire-correct mechanically — needs service-team input). A row can have both.
-
-**Verification rule:** Every ✅ Unblocked claim must satisfy BOTH (a) TSP compiles 0 errors AND (b) grep proves production SDK code (`azure/ai/ml/**/*.py` outside `_restclient/`) does NOT import any model, op, or property that the TSP fixes dropped or renamed. Surface compile counts alone are insufficient.
-
-**Spec-repo policy:** Candidate TSPs for Blocked rows are NOT shipped to `saanika/tsp_generare` (azure-rest-api-specs PR) — a TSP that can't drive the SDK migration would only block PR merge without providing value. Local candidates remain in `docs/generated-tsp/` as evidence of attempted mechanical fixes.
-
 | # | API version | Status | PR link | Comment | Test links |
 |---|---|---|---|---|---|
 | 1 | 2020-09-01-dataplanepreview | ⚪ Not Started | — | TSP required ||
