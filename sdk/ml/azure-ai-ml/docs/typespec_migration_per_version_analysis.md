@@ -8,6 +8,8 @@ For every version we determine:
 3. **Local-fork delta status** — are there differences between our local swagger and upstream, and are they used by SDK code?
 4. **Next steps**
 
+> **Scope note (Jun 2026):** the Local-vs-remote swagger delta table below answers ONLY "is the LOCAL swagger different from the REMOTE swagger in ways the SDK cares about?". A ✅ verdict here is necessary-but-not-sufficient for shipping a TSP-based client — it does NOT verify that the swagger→TSP converter then preserves every SDK-consumed type when it generates the TSP. That second check (REMOTE-swagger-vs-converted-TSP completeness) lives in [typespec_generation_status.md](typespec_generation_status.md) and currently blocks rows 10 and 11 (and likely 4, 7) due to a TSP-converter author-bug that orphans the `Compute` discriminator subtype hierarchy on every versioned `ComputeResource.tsp`.
+
 ---
 
 ## Overall version inventory
@@ -86,9 +88,10 @@ For each version we compare the **local swagger** (the one the autorest-generate
   - `2022-12-01-preview` → merge into `2022-10-01-preview` (SDK reads `AmlCompute` from there instead; only 2 import lines to flip in `entities/_compute/aml_compute.py`).
   - `2024-07-01-preview` → merge into `2024-10-01-preview` (SDK reads `Datastore` / `DatastoreSecrets` / `NoneDatastoreCredentials` / `SecretExpiry` from there instead; field-level shape parity independently verified — see row 13. Only ~3 import lines to flip in `operations/_datastore_operations.py` and `entities/_datastore/utils.py`).
 - **1 TSP already in flight upstream:** `2024-10-01-preview` (bundled `openapi.json` published; SDK consumes none of the LOCAL-only deltas).
-- **9 TSPs can be generated straight from upstream** (no SDK-consumed delta):
+- **9 TSPs can be generated straight from upstream** (no SDK-consumed delta — *at the swagger level only; see scope note above*):
   - From REMOTE (7): `2022-02-01-preview`, `2023-02-01-preview`, `2023-04-01-preview`, `2023-06-01-preview`, `2023-08-01-preview`, `2024-01-01-preview`, `2025-01-01-preview`.
   - From LOCAL (2 data-plane, no remote): `2020-09-01-dataplanepreview`, `2021-10-01-dataplanepreview`.
+  - *Caveat:* rows 10 (`2023-08-01-preview`) and 11 (`2024-01-01-preview`) are nonetheless blocked at the TSP-generation step by a converter author-bug on `ComputeResource.tsp` (empty `<{}>` body / orphan-pruned Compute discriminator subtypes). Rows 4 and 7 share the same FIXME pattern but their SDK consumers don't import the orphaned subtypes — pending regen-and-grep verification. See [typespec_generation_status.md](typespec_generation_status.md) rows 10, 11 and the aggregated "Converter emits `<{}>` empty body on ComputeResource" issue row.
 - **3 TSPs have SDK-consumed delta — need Fareed's input:** `2022-01-01-preview`, `2022-10-01-preview`, `2024-04-01-preview`. See rows 3, 5, 12 above for the exact shapes and suggested resolutions.
 
 
