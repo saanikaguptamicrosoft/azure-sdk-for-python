@@ -24,68 +24,16 @@ Row numbers `1-15` correspond to the table in [typespec_migration_per_version_an
 | 14 | `2024-10-01-preview` | ⬜ Merged | |
 | 15 | `2025-01-01-preview` | 🔴 Blocked | **TSP generation issue.** 12 errors — 10× `@typespec/http/duplicate-operation` (5 unique URL+verb collisions between siblings: e.g. `Feature` vs `Workspace`'s `/features`; `InferenceEndpoint` vs `EndpointResourcePropertiesBasicResource` `/endpoints/{name}`; `InferenceGroup` `getStatus` vs `getDeltaModelsStatusAsync` on same `/getStatus`) + 2× `missing-paging-items` (`InferenceGroup.listDeltaModelsAsync`, `RaiBlocklistPropertiesBasicResource.addBulk` — missing `@pageItems` on paged response). Genuine swagger-design ambiguity, not a converter artefact: needs service-team call on `@sharedRoute`, sub-route restructure (as in Kashif's GA TSP), or upstream swagger fix. Also tracked upstream in PR https://github.com/Azure/azure-rest-api-specs/pull/43779 (branch `saanika/tsp`). |
 
-**Status legend:** ✅ Unblocked — 0 compile errors AND SDK can consume the generated client (no dropped op/model is used by production SDK code) · 🔴 Blocked — either a **delta issue** (SDK uses types not in the standard TSP) or a **TSP generation issue** (TSP cannot be made wire-correct mechanically), often both · ⬜ Merged — TSP already upstream in `main.tsp` via `@versioned` enum, or Bucket A drop via import switch.
+## TSP generation issues — upstream fix proposals
 
-**Verification rule (this PR):** A row is **Unblocked** only when BOTH (a) the TSP compiles to 0 errors AND (b) grep proves production SDK code (`azure/ai/ml/**/*.py` outside `_restclient/`) imports NONE of the models/ops/properties dropped or renamed by the TSP fixes. Surface compile counts are NOT sufficient — must verify SDK consumption for every wire-affecting change.
+Aggregated view of the structural (swagger/TSP-design) issues that prevent the generated TSP from being SDK-consumable. Possible solutions describe how the *upstream swagger/TSP* would need to change so the generated client matches the wire AND the existing SDK keeps importing the symbols it depends on.
 
-**Spec-repo policy:** Candidate TSPs for Blocked rows are NOT shipped to `saanika/tsp_generare` (`azure-rest-api-specs` PR). A TSP that can't drive the SDK migration would only block PR merge without value. Local candidates remain in `docs/generated-tsp/` as evidence of attempted mechanical fixes.
+| Issue | Rows affected | Possible upstream fix |
+|---|---|---|
+| Discriminator collision on `AssetReferenceBase.referenceType` — value `"Id"` is declared by both `IdAssetReference` and `ResourceManagementAssetReferenceDetails`. | 2 | Rename `ResourceManagementAssetReferenceDetails.referenceType` upstream (e.g. `"Id"` → `"ResourceManagementId"`) AND update the service to accept the new wire value, so the generated client can keep the model the SDK constructs. Alternative: drop `ResourceManagementAssetReferenceDetails` from the swagger if it's a dead back-port, then refactor `entities/_assets/workspace_asset_reference.py` off it. |
+| Discriminator collision on `DataVersionBaseProperties.dataType` — value `"uri_folder"` is declared by both `UriFolderDataVersion` and the `DataImport` cluster (`DataImport` / `DataImportSource` / `DatabaseSource` / `FileSystemSource` / `ImportDataAction`). | 8, 9 | Rename the `DataImport`-cluster discriminator value upstream (e.g. `"uri_folder"` → `"uri_folder_import"`) so both branches survive in the generated TSP and the SDK's imports of `ImportDataAction` (row 8) / `DataImport`+`DatabaseSource`+`FileSystemSource` (row 9) keep resolving. Alternative: drop the `DataImport` cluster upstream from v2023-04 and v2023-06 AND refactor the SDK's `entities/_data_import/*.py` to construct these types against v2023-08 / v2024-01 instead. |
+| 10× `@typespec/http/duplicate-operation` — 5 unique URL+verb collisions between sibling interfaces (`Feature` vs `Workspaces` on `/features`; `InferenceEndpoint` vs `EndpointResourcePropertiesBasicResource` on `/endpoints/{name}`; `InferenceGroup.getStatus` vs `.getDeltaModelsStatusAsync` on `/getStatus`; etc.). | 15 | Apply the pattern Kashif used in the GA TSP: either decorate the colliding ops with `@sharedRoute`, or restructure the offending interfaces so each `(path, verb)` pair is unique. Needs to be decided upstream because the choice changes the generated client surface. |
+| 2× `missing-paging-items` — `InferenceGroup.listDeltaModelsAsync` and `RaiBlocklistPropertiesBasicResource.addBulk` return paged responses without `@pageItems`. | 15 | Add `@pageItems` to the items property on each paged response model upstream so the TSP compiler can wire pagination, and the generated client gets a proper pager instead of a flat response. |
 
-**⚠️ Process corrections:**
-- *(Jun 9, 2026)* Rows 8 and 9 were briefly classified as ✅ Unblocked based on surface compile counts (0 errors after `DataImport`-cluster removal). Reclassified to 🔴 Blocked after SDK grep showed `ImportDataAction` is imported from v2023-04 and `DataImport`/`DatabaseSource`/`FileSystemSource` from v2023-06 — dropping these models breaks SDK at import time. Same blocker pattern as row 2.
-- *(Jun 9, 2026)* Row 2 was also briefly classified as ✅ Unblocked. Reverted after grep showed SDK actively constructs the affected model — the discriminator rename breaks the wire.
-- *(Jun 9, 2026)* Candidate TSPs for rows 2, 3, 5, 8, 9 dropped from `saanika/tsp_generare` (spec repo commit `f6ef4ce44b`). Rows 1, 4, 7, 10, 11 remain (TSPs SDK can actually consume).
+> Row 12 (`2024-04-01-preview`) is also classified as a TSP generation issue but doesn't introduce a new failure class — its mechanical TSP-gen fix is identical to the row 11 fix-set. Its remaining blocker is the delta issue (`OpenAIEndpointDeploymentResourceProperties` / `EndpointDeploymentResourcePropertiesBasicResource` dropped in v2024-04 only).
 
-**Reproduce a single version:**
-```pwsh
-& 'C:\workspace\azure-rest-api-specs\node_modules\.bin\tsp.cmd' compile 'docs\generated-tsp\<folder>\main.tsp' --no-emit
-```
-
-Per-version error logs: `docs/generated-tsp/<folder>/_compile-errors.log`. Migration delta analysis: [typespec_migration_per_version_analysis.md](typespec_migration_per_version_analysis.md). Overall tracker: [typespec_migration_status.md](typespec_migration_status.md).
-
-## Mitigation Summary
-
-Rows requiring external input:
-
-- **Delta issue (SDK consumes types not in standard TSP):** rows 3, 5, 12.
-- **TSP generation issue (TSP can't be made wire-correct mechanically without breaking SDK):** rows 2, 8, 9, 12, 15.
-- **Convergence:** row 6 → row 5.
-
-(Row 12 belongs to both classes.)
-
-**TSPs shipped to `saanika/tsp_generare`** (spec repo PR-ready, all SDK-consumable, all 0 errors):
-- Row 1 (v2020-09-dp), Row 4 (v2022-02), Row 7 (v2023-02) — mechanical-only fixes (`@identifiers` deletes / `` `package` `` keyword escape), no wire impact.
-- Row 10 (v2023-08), Row 11 (v2024-01) — dropped back-compat ops (`WorkspaceFeatures_List`; for row 11 also `Endpoint_Get`/`_CreateOrUpdate`/`_List`) + dropped `DataImport` cluster + `PatchModel = {}` + (row 11 only) `ActionAsyncBase`→`ActionAsync`. Grep-verified that production SDK imports none of the dropped items from these specific versions.
-
-**Candidate TSPs NOT shipped to `saanika/tsp_generare`** (would block PR merge without enabling SDK migration; local copies remain under `docs/generated-tsp/` as evidence of attempted mechanical fixes):
-- Row 2 (v2021-10-dp), Row 3 (v2022-01), Row 5 (v2022-10), Row 8 (v2023-04), Row 9 (v2023-06).
-
-**Grep evidence per dropped item:**
-- `Workspaces.workspaceFeaturesList` op: zero call sites in production SDK — only restclient internals reference it.
-- `EndpointResourcePropertiesBasicResource` ops: zero production references (the `inference_endpoint` matches in `_autogen_entities/models/_patch.py` are unrelated `ServerlessInferenceEndpoint` property access).
-- `DataImport` cluster: imported from v2023-04 (`ImportDataAction`) and v2023-06 (`DataImport`/`DatabaseSource`/`FileSystemSource`) only — those versions stay Blocked. NOT imported from v2023-08 or v2024-01.
-- `ResourceManagementAssetReferenceDetails`: actively constructed in `entities/_assets/workspace_asset_reference.py:10-11,67-73`.
-- `WorkspaceConnectionPropertiesV2BasicResource` + auth/credential subclasses: imported in `entities/_credentials.py` + `entities/_workspace/connections/workspace_connection.py`.
-- `UserCreatedAcrAccount`/`UserCreatedStorageAccount`: imported in `entities/_registry/registry_support_classes.py:19` + `entities/_registry/util.py:8`.
-- `OpenAIEndpointDeploymentResourceProperties` + `EndpointDeploymentResourcePropertiesBasicResource`: imported in `entities/_autogen_entities/models/_patch.py:26-27` from v2024-04 specifically.
-
-| Row(s) | Failure class | Mechanical fix | SDK consumes dropped/renamed item? | Status | In spec repo? |
-|---|---|---|---|---|---|
-| 1 | None (no errors) | n/a | No | ✅ Unblocked | Yes |
-| 2 | Discriminator collision — `"Id"` on `AssetReferenceBase` | Rename `ResourceManagementAssetReferenceDetails.referenceType` value `"Id"` → `"ResourceManagementId"` | **YES** — `workspace_asset_reference.py` constructs the model | 🔴 Blocked | No |
-| 3 | (TSP compiles clean) | n/a — delta only | **YES** — `entities/_credentials.py` + `workspace_connection.py` import local-only types not in standard TSP | 🔴 Blocked | No |
-| 4 | Converter quirks only | `@identifiers` deletes | No | ✅ Unblocked | Yes |
-| 5 | (TSP compiles clean) | n/a — delta only | **YES** — `entities/_registry/*.py` imports local-only types not in standard TSP | 🔴 Blocked | No |
-| 7 | Converter quirks only | `@identifiers` + `` `package` `` escape | No | ✅ Unblocked | Yes |
-| 8 | Discriminator collision — `"uri_folder"` (`DataImport` vs `UriFolderDataVersion`) + duplicate-route on `/features` | Drop `DataImport` cluster + drop back-compat `WorkspaceFeatures_List` op | **YES** — `entities/_data_import/schedule.py` imports `ImportDataAction` from v2023-04 | 🔴 Blocked | No |
-| 9 | Same as row 8 | Same as row 8 | **YES** — `entities/_data_import/data_import.py` imports `DataImport`/`DatabaseSource`/`FileSystemSource` from v2023-06 | 🔴 Blocked | No |
-| 10 | Above + `ArmCustomPatchAsync<…, PatchModel = unknown>` rejected | Above + `PatchModel = {}` | No (from v2023-08 specifically) | ✅ Unblocked | Yes |
-| 11 | Above + 10× phantom `ActionAsyncBase` refs in 5 ops files + duplicate-route on `/endpoints` | Above + `.ActionAsyncBase<` → `.ActionAsync<` (strip `BaseParameters = …`) across 5 files + drop colliding `Endpoint_Get`/`_CreateOrUpdate`/`_List` from `EndpointResourcePropertiesBasicResources` (preserve `listKeys`/`getModels`/`regenerateKeys`) | No (from v2024-01 specifically) | ✅ Unblocked | Yes |
-| 12 | Row 11 fix-set + SDK-consumed delta | Row 11 fix-set | **YES** — `_patch.py` imports `OpenAIEndpointDeploymentResourceProperties`/`EndpointDeploymentResourcePropertiesBasicResource` from v2024-04 | 🔴 Blocked | No |
-| 15 | Duplicate routes + missing `@pageItems` | None mechanical | n/a | 🔴 Blocked | Tracked in upstream PR #43779 only |
-
-**Validated fix recipes (preserved — may be re-applied if service-team accepts the wire-affecting drops):**
-- `DataImport` cluster removal: brace-balanced block remover; walks backward to absorb `#suppress`/`@discriminator`/JSDoc, walks forward with brace-balance.
-- `ActionAsyncBase → ActionAsync`: regex replace `.ActionAsyncBase<` → `.ActionAsync<` + strip `BaseParameters = …DefaultBaseParameters<…>` template arg from 5 ops files.
-- `PatchModel = {}`: empty model literal is the only standalone-`ArmCustomPatchAsync`-compatible form.
-- `Remove-OperationByMarker` (in `_fix-recipes.ps1`): drops an op identified by its `@operationId("X_Y")` decorator anchor, absorbing all preceding decorators/JSDoc and tracking `<{([` depth so inner `;` don't trigger.
-- `Remove-AugmentBlocksReferencing`: removes multi-line `@@xxx(...)` augment-decorator blocks whose argument text matches a regex — used to clean orphan `@@clientName`/`@@clientLocation`/`@@doc` augments left behind after dropping an op.
