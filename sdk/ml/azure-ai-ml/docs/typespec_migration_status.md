@@ -5,7 +5,7 @@
 | 1 | 2020-09-01-dataplanepreview | ⚪ In PR | https://github.com/Azure/azure-sdk-for-python/pull/47392 |  ||
 | 2 | 2021-10-01-dataplanepreview | 🔴 Blocked | — | **TSP generation issue.** SDK actively constructs `ResourceManagementAssetReferenceDetails` in `entities/_assets/workspace_asset_reference.py`. The only mechanical TSP fix (discriminator value rename `"Id"` → `"ResourceManagementId"` on the conflicting sibling) is wire-affecting. Candidate TSP NOT shipped to spec repo (would block PR merge and wouldn't enable the SDK migration anyway). See [typespec_generation_status.md](typespec_generation_status.md) row 2. ||
 | 3 | 2022-01-01-preview | 🔴 Blocked | — | **Delta issue.** SDK consumes local-only `WorkspaceConnectionPropertiesV2` + 7 auth subclasses + 5 credential POCOs via `entities/_credentials.py`. Standard TSP doesn't expose these; needs decision to back-port them or refactor SDK onto a newer connection type ||
-| 4 | 2022-02-01-preview | ⚪ Not Started | — | TSP required ||
+| 4 | 2022-02-01-preview | ⚪ In PR | https://github.com/Azure/azure-sdk-for-python/pull/47392 | TSP required ||
 | 5 | 2022-10-01-preview | 🔴 Blocked | — | **Delta issue.** SDK consumes local-only `UserCreatedAcrAccount` + `UserCreatedStorageAccount` back-ported into registries.json. Standard TSP doesn't expose them ||
 | 6 | 2022-12-01-preview | 🔴 Blocked | — | Convergence into row 5 (v2022-10) — blocked on row 5 ||
 | 7 | 2023-02-01-preview | ⚪ In PR | https://github.com/Azure/azure-sdk-for-python/pull/47392 | ||
