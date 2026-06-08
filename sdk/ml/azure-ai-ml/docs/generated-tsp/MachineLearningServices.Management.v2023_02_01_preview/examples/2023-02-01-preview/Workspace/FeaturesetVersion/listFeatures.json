@@ -1,0 +1,32 @@
+{
+  "parameters": {
+    "name": "string",
+    "$skipToken": "string",
+    "api-version": "2023-02-01-preview",
+    "resourceGroupName": "test-rg",
+    "subscriptionId": "00000000-1111-2222-3333-444444444444",
+    "tags": "string",
+    "version": "string",
+    "workspaceName": "my-aml-workspace"
+  },
+  "responses": {
+    "200": {
+      "body": {
+        "nextLink": "string",
+        "value": [
+          {
+            "description": "string",
+            "dataType": "Datetime",
+            "featureName": "string",
+            "tags": {
+              "string": "string"
+            }
+          }
+        ]
+      },
+      "headers": {}
+    }
+  },
+  "operationId": "FeaturesetVersions_ListFeatures",
+  "title": "ListFeatures Workspace Featureset Version."
+}

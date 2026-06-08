@@ -1,0 +1,28 @@
+{
+  "parameters": {
+    "name": "string",
+    "api-version": "2023-02-01-preview",
+    "body": {
+      "featureName": "string"
+    },
+    "resourceGroupName": "test-rg",
+    "subscriptionId": "00000000-1111-2222-3333-444444444444",
+    "version": "string",
+    "workspaceName": "my-aml-workspace"
+  },
+  "responses": {
+    "200": {
+      "body": {
+        "description": "string",
+        "dataType": "Float",
+        "featureName": "string",
+        "tags": {
+          "string": "string"
+        }
+      },
+      "headers": {}
+    }
+  },
+  "operationId": "FeaturesetVersions_GetFeature",
+  "title": "GetFeature Workspace Featureset Version."
+}
