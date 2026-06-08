@@ -1097,7 +1097,7 @@ model ResourceManagementAssetReferenceDetails extends AssetReferenceBase {
   /**
    * Specifies the type of asset reference.
    */
-  referenceType: "Id";
+  referenceType: "ResourceManagementId";
 }
 
 /**

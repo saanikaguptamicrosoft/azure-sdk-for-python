@@ -117,20 +117,6 @@ interface Workspaces {
   >;
 
   /**
-   * Lists all enabled features for a workspace
-   */
-  #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
-  @operationId("WorkspaceFeatures_List")
-  @list
-  @get
-  @action("features")
-  list is ArmResourceActionSync<
-    Workspace,
-    void,
-    ArmResponse<ListAmlUserFeatureResult>
-  >;
-
-  /**
    * Diagnose workspace setup issue.
    */
   diagnose is ArmResourceActionAsync<

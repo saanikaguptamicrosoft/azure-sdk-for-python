@@ -27,8 +27,6 @@ using Microsoft.MachineLearningServices;
   "ManagedNetworkProvisions"
 );
 @@clientName(Workspaces.provisionManagedNetwork::parameters.body, "parameters");
-@@clientLocation(Workspaces.workspaceFeaturesList, "WorkspaceFeatures");
-@@clientName(Workspaces.workspaceFeaturesList, "List");
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "Property flatten for SDK backward compatibility."
 @@Legacy.flattenProperty(Workspace.properties);
 

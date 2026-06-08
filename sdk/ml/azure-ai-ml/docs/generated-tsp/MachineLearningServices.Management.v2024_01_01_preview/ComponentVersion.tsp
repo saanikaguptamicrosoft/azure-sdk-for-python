@@ -218,11 +218,10 @@ interface ComponentVersionOperationGroup {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("ComponentVersions_Publish")
-  publish is ComponentVersionOperationGroupOps.ActionAsyncBase<
+  publish is ComponentVersionOperationGroupOps.ActionAsync<
     ComponentVersion,
     DestinationAsset,
-    ArmAcceptedLroResponse,
-    BaseParameters = Azure.ResourceManager.Foundations.DefaultBaseParameters<ComponentVersion>
+    ArmAcceptedLroResponse
   >;
 }
 

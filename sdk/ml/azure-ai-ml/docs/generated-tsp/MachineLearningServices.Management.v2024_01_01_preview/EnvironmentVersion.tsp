@@ -224,11 +224,10 @@ interface EnvironmentVersionOperationGroup {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("EnvironmentVersions_Publish")
-  publish is EnvironmentVersionOperationGroupOps.ActionAsyncBase<
+  publish is EnvironmentVersionOperationGroupOps.ActionAsync<
     EnvironmentVersion,
     DestinationAsset,
-    ArmAcceptedLroResponse,
-    BaseParameters = Azure.ResourceManager.Foundations.DefaultBaseParameters<EnvironmentVersion>
+    ArmAcceptedLroResponse
   >;
 }
 

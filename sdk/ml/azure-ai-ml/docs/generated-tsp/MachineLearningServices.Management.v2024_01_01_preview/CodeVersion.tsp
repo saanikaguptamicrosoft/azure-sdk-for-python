@@ -224,11 +224,10 @@ interface CodeVersionOperationGroup {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("CodeVersions_Publish")
-  publish is CodeVersionOperationGroupOps.ActionAsyncBase<
+  publish is CodeVersionOperationGroupOps.ActionAsync<
     CodeVersion,
     DestinationAsset,
-    ArmAcceptedLroResponse,
-    BaseParameters = Azure.ResourceManager.Foundations.DefaultBaseParameters<CodeVersion>
+    ArmAcceptedLroResponse
   >;
 
   /**

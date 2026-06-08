@@ -292,7 +292,6 @@ using Microsoft.MachineLearningServices;
 
 @@clientName(Workspaces.createOrUpdate::parameters.resource, "body");
 @@clientName(Workspaces.update::parameters.properties, "body");
-@@clientLocation(Workspaces.list, "WorkspaceFeatures");
 @@clientLocation(Workspaces.privateLinkResourcesList, "PrivateLinkResources");
 @@clientName(Workspaces.privateLinkResourcesList, "List");
 @@clientLocation(

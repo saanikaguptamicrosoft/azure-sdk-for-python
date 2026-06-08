@@ -304,7 +304,6 @@ using Microsoft.MachineLearningServices;
 
 @@clientName(Workspaces.createOrUpdate::parameters.resource, "body");
 @@clientName(Workspaces.update::parameters.properties, "body");
-@@clientLocation(Workspaces.list, "WorkspaceFeatures");
 @@clientLocation(Workspaces.getInWorkspace, "EndpointDeployment");
 @@clientLocation(Workspaces.privateLinkResourcesList, "PrivateLinkResources");
 @@clientName(Workspaces.privateLinkResourcesList, "List");
@@ -380,16 +379,6 @@ using Microsoft.MachineLearningServices;
   "EndpointDeployment"
 );
 
-@@clientLocation(EndpointResourcePropertiesBasicResources.get, "Endpoint");
-@@clientLocation(
-  EndpointResourcePropertiesBasicResources.createOrUpdate,
-  "Endpoint"
-);
-@@clientName(
-  EndpointResourcePropertiesBasicResources.createOrUpdate::parameters.resource,
-  "body"
-);
-@@clientLocation(EndpointResourcePropertiesBasicResources.list, "Endpoint");
 @@clientLocation(EndpointResourcePropertiesBasicResources.listKeys, "Endpoint");
 @@clientLocation(
   EndpointResourcePropertiesBasicResources.getModels,

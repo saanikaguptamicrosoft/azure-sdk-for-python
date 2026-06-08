@@ -25,50 +25,6 @@ model EndpointResourcePropertiesBasicResource
 
 @armResourceOperations
 interface EndpointResourcePropertiesBasicResources {
-  /**
-   * Gets endpoint resource
-   */
-  #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
-  @operationId("Endpoint_Get")
-  get is ArmResourceRead<EndpointResourcePropertiesBasicResource>;
-
-  /**
-   * Create or update endpoint resource with the specified parameters
-   */
-  #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
-  #suppress "@azure-tools/typespec-azure-resource-manager/arm-put-operation-response-codes" "For backward compatibility"
-  @operationId("Endpoint_CreateOrUpdate")
-  createOrUpdate is ArmResourceCreateOrReplaceAsync<
-    EndpointResourcePropertiesBasicResource,
-    Response =
-      | ArmResourceUpdatedResponse<EndpointResourcePropertiesBasicResource>
-      | ArmAcceptedLroResponse,
-    LroHeaders = ArmLroLocationHeader<FinalResult = EndpointResourcePropertiesBasicResource> &
-      Azure.Core.Foundations.RetryAfterHeader
-  >;
-
-  /**
-   * List All the endpoints under this workspace
-   */
-  #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
-  @operationId("Endpoint_List")
-  list is ArmResourceListByParent<
-    EndpointResourcePropertiesBasicResource,
-    Parameters = {
-      /**
-       * Endpoint type filter
-       */
-      @query("endpointType")
-      endpointType?: EndpointType;
-
-      /**
-       * Continuation token for pagination.
-       */
-      @query("$skip")
-      $skip?: string;
-    },
-    Response = ArmResponse<EndpointResourcePropertiesBasicResourceArmPaginatedResult>
-  >;
 
   /**
    * List keys for the endpoint resource.
@@ -113,10 +69,6 @@ interface EndpointResourcePropertiesBasicResources {
   "Name of the endpoint resource."
 );
 @@doc(EndpointResourcePropertiesBasicResource.properties, "");
-@@doc(
-  EndpointResourcePropertiesBasicResources.createOrUpdate::parameters.resource,
-  "Endpoint resource object"
-);
 @@doc(
   EndpointResourcePropertiesBasicResources.regenerateKeys::parameters.body,
   ""

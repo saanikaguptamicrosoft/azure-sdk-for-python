@@ -226,7 +226,7 @@ list is ModelVersionOperationGroupOps.List<ModelVersion, Parameters = { /**
 */
 #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
 @operationId("ModelVersions_Publish")
-publish is ModelVersionOperationGroupOps.ActionAsyncBase<ModelVersion, DestinationAsset, ArmAcceptedLroResponse, BaseParameters = Azure.ResourceManager.Foundations.DefaultBaseParameters<ModelVersion>>;
+publish is ModelVersionOperationGroupOps.ActionAsync<ModelVersion, DestinationAsset, ArmAcceptedLroResponse>;
 
 
 }

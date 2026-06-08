@@ -233,11 +233,10 @@ interface DataVersions {
   /**
    * Publish version asset into registry.
    */
-  publish is DataVersionOps.ActionAsyncBase<
+  publish is DataVersionOps.ActionAsync<
     DataVersionBase,
     DestinationAsset,
-    ArmAcceptedLroResponse,
-    BaseParameters = Azure.ResourceManager.Foundations.DefaultBaseParameters<DataVersionBase>
+    ArmAcceptedLroResponse
   >;
 }
 

@@ -4861,23 +4861,6 @@ union FeatureImportanceMode {
   Enabled: "Enabled",
 }
 
-/**
- * Enum to determine the type of data.
- */
-union DataImportSourceType {
-  string,
-
-  /**
-   * database
-   */
-  database: "database",
-
-  /**
-   * file_system
-   */
-  file_system: "file_system",
-}
-
 #suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
 union FeatureAttributionMetric {
   string,
@@ -15033,39 +15016,6 @@ model FeatureImportanceSettings {
   targetColumn?: string;
 }
 
-#suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
-model DataImport extends DataVersionBaseProperties {
-  /**
-   * Name of the asset for data import job to create
-   */
-  assetName?: string;
-
-  /**
-   * Source data of the asset to import from
-   */
-  source?: DataImportSource;
-
-  /**
-   * [Required] Specifies the type of data.
-   */
-  dataType: "uri_folder";
-}
-
-#suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
-@discriminator("sourceType")
-model DataImportSource {
-  /**
-   * Workspace connection for data import source storage
-   */
-  connection?: string;
-
-  /**
-   * [Required] Specifies the type of data.
-   */
-  @visibility(Lifecycle.Read, Lifecycle.Create)
-  sourceType: DataImportSourceType;
-}
-
 /**
  * Reference to an asset via its path in a datastore.
  */
@@ -15130,35 +15080,6 @@ model DataQualityMonitoringSignal extends MonitoringSignalBase {
    * [Required] Specifies the type of signal to monitor.
    */
   signalType: "DataQuality";
-}
-
-#suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
-model DatabaseSource extends DataImportSource {
-  /**
-   * SQL Query statement for data import Database source
-   */
-  query?: string;
-
-  /**
-   * SQL StoredProcedure on data import Database source
-   */
-  storedProcedure?: string;
-
-  /**
-   * SQL StoredProcedure parameters
-   */
-  @identifiers(#[])
-  storedProcedureParams?: Record<string>[];
-
-  /**
-   * Name of the table on data import Database source
-   */
-  tableName?: string;
-
-  /**
-   * [Required] Specifies the type of data.
-   */
-  sourceType: "database";
 }
 
 #suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
@@ -15285,19 +15206,6 @@ model FeatureSubset extends MonitoringFeatureFilterBase {
    * [Required] Specifies the feature filter to leverage when selecting features to calculate metrics over.
    */
   filterType: "FeatureSubset";
-}
-
-#suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
-model FileSystemSource extends DataImportSource {
-  /**
-   * Path on data import FileSystem source
-   */
-  path?: string;
-
-  /**
-   * [Required] Specifies the type of data.
-   */
-  sourceType: "file_system";
 }
 
 /**
@@ -16372,20 +16280,6 @@ model ImageObjectDetection extends AutoMLVertical {
    * [Required] Task type for AutoMLJob.
    */
   taskType: "ImageObjectDetection";
-}
-
-#suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
-model ImportDataAction extends ScheduleActionBase {
-  /**
-   * [Required] Defines Schedule action definition details.
-   */
-  @visibility(Lifecycle.Read, Lifecycle.Create, Lifecycle.Update)
-  dataImportDefinition: DataImport;
-
-  /**
-   * [Required] Specifies the action type of the schedule
-   */
-  actionType: "ImportData";
 }
 
 #suppress "@azure-tools/typespec-azure-core/documentation-required" "For backward compatibility"
