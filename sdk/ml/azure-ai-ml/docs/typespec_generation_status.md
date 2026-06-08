@@ -46,9 +46,11 @@ Per-version error logs: `docs/generated-tsp/<folder>/_compile-errors.log`. Migra
 
 Rows requiring external input:
 
-- **Delta issue (SDK consumes types not in standard TSP):** rows 2, 3, 5, 8, 9, 12.
-- **TSP generation issue (TSP can't be made wire-correct mechanically):** row 2, row 12, row 15.
+- **Delta issue (SDK consumes types not in standard TSP):** rows 3, 5, 12.
+- **TSP generation issue (TSP can't be made wire-correct mechanically without breaking SDK):** rows 2, 8, 9, 12, 15.
 - **Convergence:** row 6 → row 5.
+
+(Row 12 belongs to both classes.)
 
 **TSPs shipped to `saanika/tsp_generare`** (spec repo PR-ready, all SDK-consumable, all 0 errors):
 - Row 1 (v2020-09-dp), Row 4 (v2022-02), Row 7 (v2023-02) — mechanical-only fixes (`@identifiers` deletes / `` `package` `` keyword escape), no wire impact.
@@ -70,9 +72,9 @@ Rows requiring external input:
 |---|---|---|---|---|---|
 | 1 | None (no errors) | n/a | No | ✅ Unblocked | Yes |
 | 2 | Discriminator collision — `"Id"` on `AssetReferenceBase` | Rename `ResourceManagementAssetReferenceDetails.referenceType` value `"Id"` → `"ResourceManagementId"` | **YES** — `workspace_asset_reference.py` constructs the model | 🔴 Blocked | No |
-| 3 | (TSP compiles clean) | n/a — delta only | **YES** — `entities/_credentials.py` + `workspace_connection.py` | 🔴 Blocked | No |
+| 3 | (TSP compiles clean) | n/a — delta only | **YES** — `entities/_credentials.py` + `workspace_connection.py` import local-only types not in standard TSP | 🔴 Blocked | No |
 | 4 | Converter quirks only | `@identifiers` deletes | No | ✅ Unblocked | Yes |
-| 5 | (TSP compiles clean) | n/a — delta only | **YES** — `entities/_registry/*.py` | 🔴 Blocked | No |
+| 5 | (TSP compiles clean) | n/a — delta only | **YES** — `entities/_registry/*.py` imports local-only types not in standard TSP | 🔴 Blocked | No |
 | 7 | Converter quirks only | `@identifiers` + `` `package` `` escape | No | ✅ Unblocked | Yes |
 | 8 | Discriminator collision — `"uri_folder"` (`DataImport` vs `UriFolderDataVersion`) + duplicate-route on `/features` | Drop `DataImport` cluster + drop back-compat `WorkspaceFeatures_List` op | **YES** — `entities/_data_import/schedule.py` imports `ImportDataAction` from v2023-04 | 🔴 Blocked | No |
 | 9 | Same as row 8 | Same as row 8 | **YES** — `entities/_data_import/data_import.py` imports `DataImport`/`DatabaseSource`/`FileSystemSource` from v2023-06 | 🔴 Blocked | No |
