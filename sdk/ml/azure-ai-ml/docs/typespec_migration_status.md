@@ -9,7 +9,7 @@ Per-version migration status for `azure-ai-ml`. Versions and scope decisions com
 | 1 | 2020-09-01-dataplanepreview | Blocked | — | TSP generation giving duplicate-operation errors ||
 | 2 | 2021-10-01-dataplanepreview | Blocked | — | TSP generation giving duplicate-operation errors ||
 | 3 | 2022-01-01-preview | Blocked | — | TSP required and delta changes exist, need Fareed's inputs ||
-| 4 | 2022-02-01-preview | Not Started | — | TSP generation giving duplicate-operation errors ||
+| 4 | 2022-02-01-preview | Blocked | — | TSP generation giving duplicate-operation errors ||
 | 5 | 2022-10-01-preview | Blocked | — | TSP required and delta changes exist, need Fareed's inputs ||
 | 6 | 2022-12-01-preview | Blocked | — | Converge into v2022-10-01-preview ||
 | 7 | 2023-02-01-preview | Blocked | — | TSP generation giving duplicate-operation errors ||
