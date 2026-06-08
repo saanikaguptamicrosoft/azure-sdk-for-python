@@ -1,36 +1,34 @@
 # TypeSpec Generation Status
 
-**Scope:** 13 ML preview API versions, generated locally under `docs/generated-tsp/` from swaggers mirrored at `docs/swagger-remote/` (REMOTE/ARM) and `docs/swagger-local/` (LOCAL/data-plane). Nothing in `azure-rest-api-specs` is touched yet — clean TSP folders will be copy-pasted upstream once they compile with zero errors.
+Row numbers `1-15` correspond to the table in [typespec_migration_per_version_analysis.md](typespec_migration_per_version_analysis.md) for cross-referencing.
+
+**Scope:** TSPs are generated locally under `docs/generated-tsp/` from swaggers mirrored at `docs/swagger-remote/` (REMOTE/ARM) and `docs/swagger-local/` (LOCAL/data-plane). Nothing in `azure-rest-api-specs` is touched yet — clean TSP folders will be copy-pasted upstream once they compile with zero errors.
 
 **Mechanical converter quirks already fixed in-place:** `@identifiers` decorator on non-array props (removed), `` `package` `` keyword escaping, missing `;` on `@@doc` augment lines and `back-compatible.tsp` `@@clientName` / `@@clientLocation` lines, `any` / `AnyObject` → `unknown`, `import` keyword escape.
 
-| Version | Source | Errors | Blocker / Action |
-|---|---|---:|---|
-| `2020-09-01-dataplanepreview` | LOCAL | **0** | ✅ Clean — ready to copy upstream |
-| `2022-01-01-preview` *(excluded delta)* | REMOTE | **0** | ✅ Clean |
-| `2022-02-01-preview` | REMOTE | **0** | ✅ Clean — ready to copy upstream |
-| `2022-10-01-preview` *(excluded delta)* | REMOTE | **0** | ✅ Clean |
-| `2022-12-01-preview` | REMOTE | **0** | ✅ Clean — ready to copy upstream |
-| `2023-02-01-preview` | REMOTE | **0** | ✅ Clean — ready to copy upstream |
-| `2023-04-01-preview` | REMOTE | 2 | 🟡 Swagger: `uri_folder` discriminator collision — `DataImport` and `UriFolderDataVersion` both declare `dataType: "uri_folder"` under `DataVersionBaseProperties` |
-| `2023-06-01-preview` | REMOTE | 2 | 🟡 Same — `uri_folder` discriminator collision |
-| `2023-08-01-preview` | REMOTE | 3 | 🟡 `uri_folder` (×2) + `ArmCustomPatchAsync<PatchModel = unknown>` rejected — template requires a `Model`; swagger lookup needed for the patch body |
-| `2021-10-01-dataplanepreview` | LOCAL | 2 | 🟡 Swagger: `Id` discriminator collision (same shape as `uri_folder`) |
-| `2024-01-01-preview` | REMOTE | 13 | 🟠 `uri_folder` (×2) + `PatchModel` (×1) + 10× `ActionAsyncBase` / `parameters` ref-resolution across 5 versioned-ops files — converter referenced `Azure.ResourceManager.Foundations` members that no longer exist; correct TSP idiom needs to be confirmed |
-| `2024-04-01-preview` *(excluded delta)* | REMOTE | 13 | 🟠 Same error mix as `2024-01` |
-| `2025-01-01-preview` *(pilot)* | REMOTE | 12 | 🔴 Architectural — 10× `@typespec/http/duplicate-operation` (5 unique URL+verb collisions: e.g. `Feature` vs `Workspace`s `/features`; `InferenceEndpoint` vs `EndpointResourcePropertiesBasicResource` `/endpoints/{name}`) + 2× `missing-paging-items`. Awaiting service-team decision (`@sharedRoute`, sub-route restructure as in Kashif's GA TSP, or upstream swagger fix). Source of truth: PR https://github.com/Azure/azure-rest-api-specs/pull/43779 (branch `saanika/tsp`); mirrored here for one-stop view. |
+| # | Version | Status | Errors / Notes |
+|---:|---|---|---|
+| 1 | `2020-09-01-dataplanepreview` | ✅ Unblocked | 0 errors — ready to copy upstream |
+| 2 | `2021-10-01-dataplanepreview` | 🟡 Blocked | 2 errors — `invalid-discriminator-value: "Id"` collision in `models.tsp` (two siblings of a discriminated union declare the same `Id` discriminator value). Same shape as the `uri_folder` issue below. |
+| 3 | `2022-01-01-preview` | 🟦 Delta — awaiting Fareed | TSP compiles 0 errors. SDK consumes local-only `WorkspaceConnectionPropertiesV2` + 7 auth subclasses + 5 credential POCOs via `entities/_credentials.py`. Needs service-team decision on whether to back-port these into the TSP or refactor SDK onto a newer version's connection types. |
+| 4 | `2022-02-01-preview` | ✅ Unblocked | 0 errors — ready to copy upstream |
+| 5 | `2022-10-01-preview` | 🟦 Delta — awaiting Fareed | TSP compiles 0 errors. SDK consumes local-only `UserCreatedAcrAccount` + `UserCreatedStorageAccount` (back-ported into registries.json). Needs service-team decision on whether to upstream these into the TSP. |
+| 6 | `2022-12-01-preview` | ⬜ Merged | — *(Bucket A: drop via import switch — `AmlCompute` is shape-identical in target `2022-10-01-preview`; ~2 SDK import lines in `entities/_compute/aml_compute.py`)* |
+| 7 | `2023-02-01-preview` | ✅ Unblocked | 0 errors — ready to copy upstream |
+| 8 | `2023-04-01-preview` | 🟡 Blocked | 2 errors — `invalid-discriminator-value: "uri_folder"` collision. Two siblings of `DataVersionBaseProperties` declare the same `dataType: "uri_folder"`: `DataImport` and `UriFolderDataVersion`. Real swagger-side issue. Options for Kashif: (a) upstream swagger rename one discriminator, (b) TSP-level discriminator override, (c) omit `DataImport` from this older TSP if not SDK-imported. |
+| 9 | `2023-06-01-preview` | 🟡 Blocked | 2 errors — same `uri_folder` discriminator collision as row 8. |
+| 10 | `2023-08-01-preview` | 🟡 Blocked | 3 errors — `uri_folder` (×2, same as row 8) + 1× `ArmCustomPatchAsync<InferenceEndpoint, PatchModel = unknown>` rejected because the template requires a `Model`, not `unknown`. The converter dropped the patch-body model. Needs Kashif's input on correct TSP idiom (e.g. `PatchModel = {}`, an inline patch model, or different template variant). |
+| 11 | `2024-01-01-preview` | 🟠 Blocked | 13 errors — `uri_folder` (×2) + `PatchModel` (×1) + 10× `invalid-ref: Interface doesn't have member ActionAsyncBase` and `Cannot resolve 'parameters' in node OperationStatement` across 5 versioned-ops files (`CodeVersion.tsp`, `ComponentVersion.tsp`, `DataVersionBase.tsp`, `EnvironmentVersion.tsp`, `ModelVersion.tsp`). Converter emitted references to `Azure.ResourceManager.Foundations` members that no longer exist. Needs Kashif's input on the correct TSP idiom (likely `ArmResourceActionAsync<...>` with reworked operation references). |
+| 12 | `2024-04-01-preview` | 🟦 Delta — awaiting Fareed | TSP compiles 13 errors (same mix as row 11). SDK also consumes local-only `OpenAIEndpointDeploymentResourceProperties` + `EndpointDeploymentResourcePropertiesBasicResource` in `entities/_autogen_entities/models/_patch.py` (REMOTE has them in v2024-01 and v2024-07 but dropped in v2024-04 only). Needs service-team decision on whether to back-port into TSP or refactor SDK onto v2024-07. |
+| 13 | `2024-07-01-preview` | ⬜ Merged | — *(Bucket A: drop via import switch — `Datastore`/`DatastoreSecrets`/`NoneDatastoreCredentials`/`SecretExpiry` shape-identical in target `2024-10-01-preview`; ~3 SDK import lines in `operations/_datastore_operations.py` and `entities/_datastore/utils.py`)* |
+| 14 | `2024-10-01-preview` | 🟢 In flight | TSP already exists upstream in `MachineLearningServices.Management/main.tsp` with this version in the `@versioned` enum. Migration is the one being polished in PR https://github.com/Azure/azure-sdk-for-python/pull/45389 (work tracked separately, not in `docs/generated-tsp/`). |
+| 15 | `2025-01-01-preview` *(pilot)* | 🔴 Blocked — architectural | 12 errors — 10× `@typespec/http/duplicate-operation` (5 unique URL+verb collisions between siblings: e.g. `Feature` vs `Workspace`s `/features`; `InferenceEndpoint` vs `EndpointResourcePropertiesBasicResource` `/endpoints/{name}`; `InferenceGroup` `getStatus` vs `getDeltaModelsStatusAsync` on same `/getStatus`) + 2× `missing-paging-items` (`InferenceGroup.listDeltaModelsAsync`, `RaiBlocklistPropertiesBasicResource.addBulk` — missing `@pageItems` on paged response). Awaiting service-team decision (`@sharedRoute`, sub-route restructure as in Kashif's GA TSP, or upstream swagger fix). Source of truth: PR https://github.com/Azure/azure-rest-api-specs/pull/43779 (branch `saanika/tsp`); mirrored here for one-stop view. |
 
-**Legend:** ✅ ready to copy upstream · 🟡 single real swagger-side issue, tractable · 🟠 swagger fixes + missing TSP template idiom · 🔴 architectural blocker awaiting service-team input.
+**Legend:** ✅ unblocked, ready to copy upstream · 🟡 single real swagger-side issue, tractable, needs Kashif's call · 🟠 swagger fixes + missing TSP template idiom, needs Kashif's call · 🔴 architectural blocker awaiting service-team input · 🟦 SDK-consumed delta — needs Fareed/service-team decision before TSP can be finalized · 🟢 in flight (already underway upstream) · ⬜ merged via import switch — no standalone TSP needed.
 
-**Remaining error classes (cannot be auto-fixed — require investigation / service-team input):**
-1. `invalid-discriminator-value` — same swagger discriminator value used by two siblings (`uri_folder`, `Id`). Options: rename upstream, TSP-level discriminator override, or omit one model if not SDK-imported.
-2. `ArmCustomPatchAsync<..., PatchModel = ...>` constraint — needs the actual patch-body model from the source swagger.
-3. `Interface doesn't have member ActionAsyncBase` / `Cannot resolve 'parameters'` — converter emitted references to `Azure.ResourceManager.Foundations` API surface that has been removed. Correct replacement is likely `ArmResourceActionAsync<...>` with reworked operation references, but should be verified before applying broadly.
-4. **Pilot only:** `@typespec/http/duplicate-operation` and `missing-paging-items` — architectural; resolved upstream by Kashif's GA TSP via sub-route restructure.
-
-**Reproduce:**
+**Reproduce a single version:**
 ```pwsh
 & 'C:\workspace\azure-rest-api-specs\node_modules\.bin\tsp.cmd' compile 'docs\generated-tsp\<folder>\main.tsp' --no-emit
 ```
 
-Per-version error logs live at `docs/generated-tsp/<folder>/_compile-errors.log`. Migration delta analysis: `docs/typespec_migration_per_version_analysis.md`. Overall tracker: `docs/typespec_migration_status.md`. Agent gotchas: `/memories/repo/typespec-migration-context.md` and `/memories/repo/tsp-migration-notes.md`.
+Per-version error logs: `docs/generated-tsp/<folder>/_compile-errors.log`. Migration delta analysis: [typespec_migration_per_version_analysis.md](typespec_migration_per_version_analysis.md). Overall tracker: [typespec_migration_status.md](typespec_migration_status.md).
