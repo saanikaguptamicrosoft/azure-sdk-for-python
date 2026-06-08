@@ -11,8 +11,8 @@
 | 7 | `2023-02-01-preview` | ✅ Unblocked | 0 errors. |
 | 8 | `2023-04-01-preview` | 🔴 Blocked | → Issue 2. SDK imports `ImportDataAction` (`entities/_data_import/schedule.py:9`). |
 | 9 | `2023-06-01-preview` | 🔴 Blocked | → Issue 2. SDK imports `DataImport`/`DatabaseSource`/`FileSystemSource` (`entities/_data_import/data_import.py:9-11`). |
-| 10 | `2023-08-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstance`/`ComputeInstanceProperties`/`ComputeInstanceSshSettings` (`entities/_compute/compute_instance.py:13-16`). TSP dropped from spec PR. |
-| 11 | `2024-01-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstanceDataMount` (`operations/_data_operations.py:29`, `operations/_datastore_operations.py:15`). TSP dropped from spec PR. |
+| 10 | `2023-08-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstance`/`ComputeInstanceProperties`/`ComputeInstanceSshSettings` (`entities/_compute/compute_instance.py:13-16`). |
+| 11 | `2024-01-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstanceDataMount` (`operations/_data_operations.py:29`, `operations/_datastore_operations.py:15`). |
 | 12 | `2024-04-01-preview` | 🔴 Blocked | → Delta 3. Mechanical TSP-gen fixes known. |
 | 13 | `2024-07-01-preview` | ⬜ Merged | |
 | 14 | `2024-10-01-preview` | ⬜ Merged | |
