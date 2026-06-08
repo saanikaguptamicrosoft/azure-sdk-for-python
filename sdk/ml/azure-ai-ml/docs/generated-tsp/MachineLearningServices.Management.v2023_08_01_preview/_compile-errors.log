@@ -1,0 +1,19 @@
+TypeSpec compiler v1.12.0
+
+- Compiling...
+├ù Compiling
+Diagnostics were reported during compilation:
+
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2023_08_01_preview/InferenceEndpoint.tsp[39m:[33m51[39m:[33m52[39m - [31merror[39m [90minvalid-argument[39m: Argument of type 'unknown' is not assignable to parameter of type 'Model'
+> 51 |   update is ArmCustomPatchAsync<InferenceEndpoint, PatchModel = unknown>;
+     |                                                    ^^^^^^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2023_08_01_preview/models.tsp[39m:[33m13536[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "uri_folder" is already used in another variant.
+> 13536 | model DataImport extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2023_08_01_preview/models.tsp[39m:[33m16507[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "uri_folder" is already used in another variant.
+> 16507 | model UriFolderDataVersion extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^^^^^^^^^^^
+
+Found 3 errors.
+
+

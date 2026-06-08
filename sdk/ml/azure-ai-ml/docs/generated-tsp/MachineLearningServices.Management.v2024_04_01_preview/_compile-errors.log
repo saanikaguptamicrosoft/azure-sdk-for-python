@@ -1,0 +1,49 @@
+TypeSpec compiler v1.12.0
+
+- Compiling...
+├ù Compiling
+Diagnostics were reported during compilation:
+
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/CodeVersion.tsp[39m:[33m227[39m:[33m43[39m - [31merror[39m [90minvalid-ref[39m: Interface doesn't have member ActionAsyncBase
+> 227 |   publish is CodeVersionOperationGroupOps.ActionAsyncBase<
+      |                                           ^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/CodeVersion.tsp[39m:[33m265[39m:[33m38[39m - [31merror[39m [90minvalid-ref[39m: Cannot resolve 'parameters' in node OperationStatement since it has no members. Did you mean to use "::" instead of "."?
+> 265 |   CodeVersionOperationGroup.publish::parameters.body,
+      |                                      ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/ComponentVersion.tsp[39m:[33m221[39m:[33m48[39m - [31merror[39m [90minvalid-ref[39m: Interface doesn't have member ActionAsyncBase
+> 221 |   publish is ComponentVersionOperationGroupOps.ActionAsyncBase<
+      |                                                ^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/ComponentVersion.tsp[39m:[33m243[39m:[33m43[39m - [31merror[39m [90minvalid-ref[39m: Cannot resolve 'parameters' in node OperationStatement since it has no members. Did you mean to use "::" instead of "."?
+> 243 |   ComponentVersionOperationGroup.publish::parameters.body,
+      |                                           ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/DataVersionBase.tsp[39m:[33m236[39m:[33m29[39m - [31merror[39m [90minvalid-ref[39m: Interface doesn't have member ActionAsyncBase
+> 236 |   publish is DataVersionOps.ActionAsyncBase<
+      |                             ^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/DataVersionBase.tsp[39m:[33m261[39m:[33m29[39m - [31merror[39m [90minvalid-ref[39m: Cannot resolve 'parameters' in node OperationStatement since it has no members. Did you mean to use "::" instead of "."?
+> 261 | @@doc(DataVersions.publish::parameters.body, "Destination registry info");
+      |                             ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/EnvironmentVersion.tsp[39m:[33m227[39m:[33m50[39m - [31merror[39m [90minvalid-ref[39m: Interface doesn't have member ActionAsyncBase
+> 227 |   publish is EnvironmentVersionOperationGroupOps.ActionAsyncBase<
+      |                                                  ^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/EnvironmentVersion.tsp[39m:[33m249[39m:[33m45[39m - [31merror[39m [90minvalid-ref[39m: Cannot resolve 'parameters' in node OperationStatement since it has no members. Did you mean to use "::" instead of "."?
+> 249 |   EnvironmentVersionOperationGroup.publish::parameters.body,
+      |                                             ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/ModelVersion.tsp[39m:[33m229[39m:[33m42[39m - [31merror[39m [90minvalid-ref[39m: Interface doesn't have member ActionAsyncBase
+> 229 | publish is ModelVersionOperationGroupOps.ActionAsyncBase<ModelVersion, DestinationAsset, ArmAcceptedLroResponse, BaseParameters = Azure.ResourceManager.Foundations.DefaultBaseParameters<ModelVersion>>;
+      |                                          ^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/ModelVersion.tsp[39m:[33m242[39m:[33m45[39m - [31merror[39m [90minvalid-ref[39m: Cannot resolve 'parameters' in node OperationStatement since it has no members. Did you mean to use "::" instead of "."?
+> 242 | @@doc(ModelVersionOperationGroup.`publish`::parameters.body, "Destination registry info");
+      |                                             ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/InferenceEndpoint.tsp[39m:[33m51[39m:[33m52[39m - [31merror[39m [90minvalid-argument[39m: Argument of type 'unknown' is not assignable to parameter of type 'Model'
+> 51 |   update is ArmCustomPatchAsync<InferenceEndpoint, PatchModel = unknown>;
+     |                                                    ^^^^^^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/models.tsp[39m:[33m15324[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "uri_folder" is already used in another variant.
+> 15324 | model DataImport extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2024_04_01_preview/models.tsp[39m:[33m18377[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "uri_folder" is already used in another variant.
+> 18377 | model UriFolderDataVersion extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^^^^^^^^^^^
+
+Found 13 errors.
+
+

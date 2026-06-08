@@ -1,0 +1,34 @@
+TypeSpec compiler v1.12.0
+
+- Compiling...
+ΓÜá Compiling
+Diagnostics were reported during compilation:
+
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/main.tsp[39m:[33m33[39m:[33m21[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-operations-endpoint[39m: Arm namespace MachineLearningServices is missing the Operations interface. Add "interface Operations extends Azure.ResourceManager.Operations {}".
+> 33 | namespace Microsoft.MachineLearningServices;
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m446[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 446 |   properties?: Record<string>;
+      |   ^^^^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m404[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "name" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 404 |   name?: string;
+      |   ^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m681[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 681 |   details?: ErrorDetail[];
+      |   ^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m821[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 821 | model MLFlowModelJobInput extends JobInput {
+      |       ^^^^^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m831[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 831 | model MLFlowModelJobOutput extends JobOutputV2 {
+      |       ^^^^^^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m841[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 841 | model MLTableJobInput extends JobInput {
+      |       ^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2020_09_01_dataplanepreview/models.tsp[39m:[33m851[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 851 | model MLTableJobOutput extends JobOutputV2 {
+      |       ^^^^^^^^^^^^^^^^
+
+Found 8 warnings.
+
+

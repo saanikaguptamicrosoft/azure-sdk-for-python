@@ -1,0 +1,16 @@
+TypeSpec compiler v1.12.0
+
+- Compiling...
+├ù Compiling
+Diagnostics were reported during compilation:
+
+[36mdocs/generated-tsp/MFE.Dataplane.v2021_10_01_dataplanepreview/models.tsp[39m:[33m1081[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "Id" is already used in another variant.
+> 1081 | model ResourceManagementAssetReferenceDetails extends AssetReferenceBase {
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36mdocs/generated-tsp/MFE.Dataplane.v2021_10_01_dataplanepreview/models.tsp[39m:[33m2284[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "Id" is already used in another variant.
+> 2284 | model IdAssetReference extends AssetReferenceBase {
+       |       ^^^^^^^^^^^^^^^^
+
+Found 2 errors.
+
+

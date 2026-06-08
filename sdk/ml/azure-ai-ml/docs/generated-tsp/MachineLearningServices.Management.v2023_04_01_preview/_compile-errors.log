@@ -1,0 +1,16 @@
+TypeSpec compiler v1.12.0
+
+- Compiling...
+├ù Compiling
+Diagnostics were reported during compilation:
+
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2023_04_01_preview/models.tsp[39m:[33m12705[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "uri_folder" is already used in another variant.
+> 12705 | model DataImport extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^
+[36mdocs/generated-tsp/MachineLearningServices.Management.v2023_04_01_preview/models.tsp[39m:[33m15430[39m:[33m7[39m - [31merror[39m [90minvalid-discriminator-value[39m: Discriminator value "uri_folder" is already used in another variant.
+> 15430 | model UriFolderDataVersion extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^^^^^^^^^^^
+
+Found 2 errors.
+
+
