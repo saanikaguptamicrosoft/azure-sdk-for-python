@@ -18,17 +18,16 @@ For each delta we need one of two answers from the service team:
 
 ## Summary
 
-The `#` column matches the `Delta N` section heading below (and is the cross-doc identifier referenced from [typespec_generation_status.md](typespec_generation_status.md) and [typespec_migration_status.md](typespec_migration_status.md)). Rows are grouped by API version for navigation.
-
 | # | API version | What's missing / different in upstream | Count | Owning SDK file |
 |---:|---|---|---:|---|
 | 1 | `2022-01-01-preview` | `ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword` (and their base `Credentials`) — entirely missing | 6 types | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
 | 2 | `2022-10-01-preview` | `UserCreatedAcrAccount`, `UserCreatedStorageAccount` — entirely missing; plus parent properties `AcrDetails.userCreatedAcrAccount` and `StorageAccountDetails.userCreatedStorageAccount` also missing | 2 types + 2 fields | [entities/_registry/registry_support_classes.py](../azure/ai/ml/entities/_registry/registry_support_classes.py), [entities/_registry/util.py](../azure/ai/ml/entities/_registry/util.py) |
-| 4 | `2022-10-01-preview` | `Registry.managedResourceGroupTags` — field present locally and actively written by SDK, missing in upstream | 1 field | [entities/_registry/registry.py](../azure/ai/ml/entities/_registry/registry.py) |
-| 3 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` — entirely missing | 1 type | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
+| 3 | `2022-10-01-preview` | `Registry.managedResourceGroupTags` — field present locally and actively written by SDK, missing in upstream | 1 field | [entities/_registry/registry.py](../azure/ai/ml/entities/_registry/registry.py) |
+| 4 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` — entirely missing | 1 type | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
 | 5 | `2024-04-01-preview` | `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` — disagrees with upstream on credential type (local uses `WorkspaceConnectionSharedAccessSignature{sas}`, upstream uses `WorkspaceConnectionAccountKey{key}`) | 1 field | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
 
 **Total: 9 entirely-missing types (including the shared `Credentials` base) + 4 field-level disagreements across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
+
 ---
 
 ## Delta 1 — `2022-01-01-preview` workspace-connection auth credentials
@@ -51,21 +50,7 @@ Field-level schemas: see [appendix](#delta-2-schemas).
 
 ---
 
-## Delta 3 — `2024-04-01-preview` Azure OpenAI endpoint deployment
-
-`entities/_autogen_entities/models/_patch.py` uses `OpenAIEndpointDeploymentResourceProperties` to deserialize and construct Azure OpenAI deployments under a workspace endpoint. The type is the `properties` shape returned when an endpoint deployment carries `properties.type == "Azure.OpenAI"`.
-
-The companion `EndpointDeploymentResourcePropertiesBasicResource` (the ARM envelope) **is** present in the upstream `2024-04-01-preview` spec — only the `OpenAIEndpointDeploymentResourceProperties` subtype is missing.
-
-The same subtype **is** present in the upstream swaggers for `2024-01-01-preview` and `2024-07-01-preview`. Its absence from `2024-04-01-preview` only looks like an unintentional regression.
-
-> **Question for service team:** Was the removal of `OpenAIEndpointDeploymentResourceProperties` from `2024-04-01-preview` intentional? If it was a regression, please add it back so it matches `2024-01` and `2024-07`. If intentional, please advise what the SDK should use on `2024-04` instead.
-
-Field-level schemas: see [appendix](#delta-3-schemas).
-
----
-
-## Delta 4 — `2022-10-01-preview` `Registry.managedResourceGroupTags`
+## Delta 3 — `2022-10-01-preview` `Registry.managedResourceGroupTags`
 
 The local copy of `Registry` (aka `RegistryProperties`) has a `managedResourceGroupTags` property:
 
@@ -88,6 +73,20 @@ managed_resource_group_tags=self.tags
 Users who set `tags=...` on a `Registry` expect those tags to flow through to the managed resource group; without this field upstream, the property would be silently dropped from the request after we regenerate.
 
 > **Question for service team:** Is `Registry.managedResourceGroupTags` an intentional part of the `2022-10-01-preview` contract? If yes, please add it to the upstream `Registry` (a.k.a. `RegistryProperties`) definition. If no, we will remove `managed_resource_group_tags=self.tags` from `_registry/registry.py` and stop forwarding user tags to the managed resource group on this version.
+
+Field-level schemas: see [appendix](#delta-3-schemas).
+
+---
+
+## Delta 4 — `2024-04-01-preview` Azure OpenAI endpoint deployment
+
+`entities/_autogen_entities/models/_patch.py` uses `OpenAIEndpointDeploymentResourceProperties` to deserialize and construct Azure OpenAI deployments under a workspace endpoint. The type is the `properties` shape returned when an endpoint deployment carries `properties.type == "Azure.OpenAI"`.
+
+The companion `EndpointDeploymentResourcePropertiesBasicResource` (the ARM envelope) **is** present in the upstream `2024-04-01-preview` spec — only the `OpenAIEndpointDeploymentResourceProperties` subtype is missing.
+
+The same subtype **is** present in the upstream swaggers for `2024-01-01-preview` and `2024-07-01-preview`. Its absence from `2024-04-01-preview` only looks like an unintentional regression.
+
+> **Question for service team:** Was the removal of `OpenAIEndpointDeploymentResourceProperties` from `2024-04-01-preview` intentional? If it was a regression, please add it back so it matches `2024-01` and `2024-07`. If intentional, please advise what the SDK should use on `2024-04` instead.
 
 Field-level schemas: see [appendix](#delta-4-schemas).
 
@@ -279,29 +278,6 @@ Both schemas below live in `2022-10-01-preview/registries.json`. They reference 
 
 ### Delta 3 schemas
 
-Lives in `2024-04-01-preview/workspaceRP.json`.
-
-#### `OpenAIEndpointDeploymentResourceProperties`
-
-```json
-{
-  "type": "object",
-  "allOf": [
-    { "$ref": "#/definitions/CognitiveServiceEndpointDeploymentResourceProperties" },
-    { "$ref": "#/definitions/EndpointDeploymentResourceProperties" }
-  ],
-  "x-ms-discriminator-value": "Azure.OpenAI"
-}
-```
-
-This is a discriminator subtype of `EndpointDeploymentResourceProperties` (which is present upstream). The discriminator field on the parent is matched against `"Azure.OpenAI"` to select this subtype. It also re-uses the field set from `CognitiveServiceEndpointDeploymentResourceProperties` (also present upstream) via `allOf` — so the subtype itself adds no new fields, only a new discriminator value plus the inherited fields from the two parents.
-
-The minimal fix is to re-add this empty-body subtype with `x-ms-discriminator-value: "Azure.OpenAI"` to the `2024-04-01-preview` swagger. Both parent types are already in the spec, so no other changes are needed.
-
----
-
-### Delta 4 schemas
-
 Lives in `2022-10-01-preview/registries.json`. The full local `Registry` (a.k.a. `RegistryProperties`) — the missing field is `managedResourceGroupTags`.
 
 #### `Registry` (local) — missing `managedResourceGroupTags` upstream
@@ -344,6 +320,29 @@ Lives in `2022-10-01-preview/registries.json`. The full local `Registry` (a.k.a.
 All properties except the last one (`managedResourceGroupTags`) are already in the upstream copy. The minimal fix is to add the one property to upstream `Registry` / `RegistryProperties`.
 
 Also note (covered by Delta 2): the parent containers `AcrDetails` and `StorageAccountDetails` in this same version are missing the `userCreatedAcrAccount` and `userCreatedStorageAccount` properties respectively — both required by the Delta 2 fix. When adding the `UserCreated*` types upstream, please also add these properties to their parent containers.
+
+---
+
+### Delta 4 schemas
+
+Lives in `2024-04-01-preview/workspaceRP.json`.
+
+#### `OpenAIEndpointDeploymentResourceProperties`
+
+```json
+{
+  "type": "object",
+  "allOf": [
+    { "$ref": "#/definitions/CognitiveServiceEndpointDeploymentResourceProperties" },
+    { "$ref": "#/definitions/EndpointDeploymentResourceProperties" }
+  ],
+  "x-ms-discriminator-value": "Azure.OpenAI"
+}
+```
+
+This is a discriminator subtype of `EndpointDeploymentResourceProperties` (which is present upstream). The discriminator field on the parent is matched against `"Azure.OpenAI"` to select this subtype. It also re-uses the field set from `CognitiveServiceEndpointDeploymentResourceProperties` (also present upstream) via `allOf` — so the subtype itself adds no new fields, only a new discriminator value plus the inherited fields from the two parents.
+
+The minimal fix is to re-add this empty-body subtype with `x-ms-discriminator-value: "Azure.OpenAI"` to the `2024-04-01-preview` swagger. Both parent types are already in the spec, so no other changes are needed.
 
 ---
 

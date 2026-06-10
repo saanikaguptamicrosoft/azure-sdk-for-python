@@ -6,14 +6,14 @@
 | 2 | `2021-10-01-dataplanepreview` | 🔴 Blocked | → Issue 1. SDK constructs `ResourceManagementAssetReferenceDetails` (`entities/_assets/workspace_asset_reference.py`). |
 | 3 | `2022-01-01-preview` | 🔴 Blocked | → Delta 1. TSP compiles 0 errors; SDK consumes local-only connection/credential types. |
 | 4 | `2022-02-01-preview` | ✅ Unblocked | 0 errors. |
-| 5 | `2022-10-01-preview` | 🔴 Blocked | → Delta 2, Delta 4. TSP compiles 0 errors; SDK consumes local-only `UserCreatedAcrAccount`/`UserCreatedStorageAccount` (Delta 2) and writes local-only `Registry.managedResourceGroupTags` (Delta 4). |
+| 5 | `2022-10-01-preview` | 🔴 Blocked | → Delta 2, Delta 3. TSP compiles 0 errors; SDK consumes local-only `UserCreatedAcrAccount`/`UserCreatedStorageAccount` (Delta 2) and writes local-only `Registry.managedResourceGroupTags` (Delta 3). |
 | 6 | `2022-12-01-preview` | 🔴 Blocked | Converges into v2022-10; blocked on row 5. |
 | 7 | `2023-02-01-preview` | ✅ Unblocked | 0 errors. |
 | 8 | `2023-04-01-preview` | 🔴 Blocked | → Issue 2. SDK imports `ImportDataAction` (`entities/_data_import/schedule.py:9`). |
 | 9 | `2023-06-01-preview` | 🔴 Blocked | → Issue 2. SDK imports `DataImport`/`DatabaseSource`/`FileSystemSource` (`entities/_data_import/data_import.py:9-11`). |
 | 10 | `2023-08-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstance`/`ComputeInstanceProperties`/`ComputeInstanceSshSettings` (`entities/_compute/compute_instance.py:13-16`). |
 | 11 | `2024-01-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstanceDataMount` (`operations/_data_operations.py:29`, `operations/_datastore_operations.py:15`). |
-| 12 | `2024-04-01-preview` | 🔴 Blocked | → Delta 3, Delta 5. Mechanical TSP-gen fixes known; plus `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` shape disagreement (LOCAL `WorkspaceConnectionSharedAccessSignature{sas}` vs upstream `WorkspaceConnectionAccountKey{key}` — Delta 5). |
+| 12 | `2024-04-01-preview` | 🔴 Blocked | → Delta 4, Delta 5. Mechanical TSP-gen fixes known; plus `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` shape disagreement (LOCAL `WorkspaceConnectionSharedAccessSignature{sas}` vs upstream `WorkspaceConnectionAccountKey{key}` — Delta 5). |
 | 13 | `2024-07-01-preview` | ⬜ Merged | |
 | 14 | `2024-10-01-preview` | ⬜ Merged | |
 | 15 | `2025-01-01-preview` | 🔴 Blocked | → Issue 3. 12 errors (10× `duplicate-operation` is the real blocker). |
