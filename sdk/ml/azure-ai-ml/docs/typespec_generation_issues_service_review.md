@@ -21,10 +21,10 @@ That means **every issue below has to be fixed on the spec side**. The service t
 |---:|---|---|---|---|
 | 1 | Discriminator collision on `AssetReferenceBase.referenceType` — value `"Id"` shared by `IdAssetReference` and `ResourceManagementAssetReferenceDetails` | `2021-10-01-dataplanepreview` | TSP compile fails; SDK consumes `ResourceManagementAssetReferenceDetails` from this version | [entities/_assets/workspace_asset_reference.py](../azure/ai/ml/entities/_assets/workspace_asset_reference.py) |
 | 2 | Discriminator collision on `DataVersionBaseProperties.dataType` — value `"uri_folder"` shared by `UriFolderDataVersion` and `DataImport` | `2023-04-01-preview`, `2023-06-01-preview`, `2024-04-01-preview` | TSP compile fails; SDK consumes `DataImport` on each affected version | [entities/_data_import/data_import.py](../azure/ai/ml/entities/_data_import/data_import.py), [entities/_data_import/schedule.py](../azure/ai/ml/entities/_data_import/schedule.py) |
-| 3 | Converter emits `// FIXME: ComputeResource has no properties property` + empty `<{}>` body on `ComputeResource.tsp`; the `Compute` discriminated union and ~137 subtype models become orphans and the python emitter prunes them | All 11 versioned `ComputeResource.tsp` files (`2022-01` … `2025-01`); SDK only breaks on versions whose consumers import pruned `Compute*` symbols — currently `2023-08-01-preview` and `2024-01-01-preview` | TSP compiles but regenerated client is missing `ComputeInstance`, `ComputeInstanceProperties`, `ComputeInstanceSshSettings`, `ComputeInstanceDataMount`, `AssignedUser`, `PersonalComputeInstanceSettings` and the rest of the Compute family → `ImportError` at SDK module load | [entities/_compute/compute_instance.py](../azure/ai/ml/entities/_compute/compute_instance.py), [operations/_data_operations.py](../azure/ai/ml/operations/_data_operations.py), [operations/_datastore_operations.py](../azure/ai/ml/operations/_datastore_operations.py) |
-| 4 | 10× `@typespec/http/duplicate-operation` (5 unique `(path, verb)` collisions) + 2× `missing-paging-items` | `2025-01-01-preview` | TSP compile fails — 12 errors | [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py) |
+| 3 | Converter emits `// FIXME: ComputeResource has no properties property` + empty `<{}>` body on `ComputeResource.tsp`; the `Compute` discriminated union and ~137 subtype models become orphans and the python emitter prunes them | `2023-08-01-preview`, `2024-01-01-preview` | TSP compiles but regenerated client is missing `ComputeInstance`, `ComputeInstanceProperties`, `ComputeInstanceSshSettings`, `ComputeInstanceDataMount`, `AssignedUser`, `PersonalComputeInstanceSettings` and the rest of the Compute family → `ImportError` at SDK module load | [entities/_compute/compute_instance.py](../azure/ai/ml/entities/_compute/compute_instance.py), [operations/_data_operations.py](../azure/ai/ml/operations/_data_operations.py), [operations/_datastore_operations.py](../azure/ai/ml/operations/_datastore_operations.py) |
+| 4 | `@typespec/http/duplicate-operation` on 5 unique `(path, verb)` pairs + `@typespec/http/missing-paging-items` on 2 paged operations | `2025-01-01-preview` | TSP compile fails | [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py) |
 
-**Total: 4 distinct TSP-generation issues blocking 5 API versions** (`2021-10-01-dataplanepreview`, `2023-04-01-preview`, `2023-06-01-preview`, `2023-08-01-preview`, `2024-01-01-preview`, `2024-04-01-preview`, `2025-01-01-preview` — `2024-04-01-preview` is also blocked on a separate delta, see [typespec_deltas_service_review.md](typespec_deltas_service_review.md) Delta 4 + Delta 5). Full schema / TSP / error definitions in the [appendix](#appendix--full-evidence).
+**Total: 4 distinct TSP-generation issues blocking 7 API versions** (`2021-10-01-dataplanepreview`, `2023-04-01-preview`, `2023-06-01-preview`, `2023-08-01-preview`, `2024-01-01-preview`, `2024-04-01-preview`, `2025-01-01-preview`). Full schema / TSP / error definitions in the [appendix](#appendix--full-evidence).
 
 ---
 
@@ -71,7 +71,7 @@ Field-level schemas + the colliding discriminator excerpts: see [appendix](#issu
 
 ---
 
-## Issue 3 — Converter emits empty `<{}>` body on every versioned `ComputeResource.tsp`, orphan-pruning the `Compute` hierarchy
+## Issue 3 — Converter emits empty `<{}>` body on `ComputeResource.tsp`, orphan-pruning the `Compute` hierarchy
 
 This is the highest-impact issue, blocks two SDK migrations end-to-end (`2023-08-01-preview` and `2024-01-01-preview`), and is the one that motivated a full audit of the generator output rather than just the swagger.
 
@@ -95,7 +95,7 @@ This is the highest-impact issue, blocks two SDK migrations end-to-end (`2023-08
 
 `ComputeResourceSchema` (the second `allOf` mixin) carries one property: `properties: Compute` — i.e. it is what wires the `Compute` discriminated union (`AmlCompute` / `ComputeInstance` / `Kubernetes` / `VirtualMachine` / `HDInsight` / `Databricks` / …) onto the ARM envelope.
 
-The converter could not fold that mixin into a TypeSpec `Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<T>` template parameter — the slot for the body type — so it left the slot empty and dropped a `// FIXME` comment. The result, verbatim from every one of the 11 generated `ComputeResource.tsp` files (versions `2022-01` through `2025-01`):
+The converter could not fold that mixin into a TypeSpec `Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<T>` template parameter — the slot for the body type — so it left the slot empty and dropped a `// FIXME` comment. The result, verbatim from the converter output on both blocked versions:
 
 ```typespec
 // FIXME: ComputeResource has no properties property
@@ -118,13 +118,12 @@ model ComputeResource
 
 The 137 missing exports are almost entirely the `Compute` family + `SsoSetting` + `ResourceId` + `PaginatedComputeResourcesList`.
 
-**Which SDK migrations break.** The TSP defect is present on every versioned `ComputeResource.tsp`, but a version is **only blocked** if the SDK imports one of the pruned `Compute*` symbols from that specific version. Empirically verified:
+**Which SDK migrations break.** Empirically verified by inspecting each blocked version's SDK consumers:
 
-| Version | Pruned imports SDK relies on | Status |
-|---|---|---|
-| `2023-08-01-preview` | `ComputeInstance`, `ComputeInstanceProperties`, `ComputeInstanceSshSettings`, `PersonalComputeInstanceSettings`, `AssignedUser` — all imported in [entities/_compute/compute_instance.py:13-16](../azure/ai/ml/entities/_compute/compute_instance.py#L13-L16) | **Blocked** |
-| `2024-01-01-preview` | `ComputeInstanceDataMount` (field on `ComputeInstanceProperties`) — imported in [operations/_data_operations.py:29](../azure/ai/ml/operations/_data_operations.py#L29) and [operations/_datastore_operations.py:15](../azure/ai/ml/operations/_datastore_operations.py#L15) | **Blocked** |
-| `2022-02`, `2023-02`, `2024-04`, `2025-01` | None — SDK imports from these versions don't touch the `Compute*` graph | Defect present but no-op |
+| Version | Pruned imports SDK relies on |
+|---|---|
+| `2023-08-01-preview` | `ComputeInstance`, `ComputeInstanceProperties`, `ComputeInstanceSshSettings`, `PersonalComputeInstanceSettings`, `AssignedUser` — all imported in [entities/_compute/compute_instance.py:13-16](../azure/ai/ml/entities/_compute/compute_instance.py#L13-L16) |
+| `2024-01-01-preview` | `ComputeInstanceDataMount` (field on `ComputeInstanceProperties`) — imported in [operations/_data_operations.py:29](../azure/ai/ml/operations/_data_operations.py#L29) and [operations/_datastore_operations.py:15](../azure/ai/ml/operations/_datastore_operations.py#L15) |
 
 **A precedent that works.** The GA, hand-authored `MachineLearningServices.Management/ComputeResource.tsp` ([Azure/azure-rest-api-specs main branch](https://github.com/Azure/azure-rest-api-specs/blob/main/specification/machinelearningservices/MachineLearningServices.Management/ComputeResource.tsp)) wires `Compute` correctly by passing it as the body type and suppressing the legacy-hierarchy lint warnings:
 
@@ -143,7 +142,7 @@ model ComputeResource is Azure.ResourceManager.ProxyResource<Compute> {
 
 When the body type is non-empty and references `Compute`, the discriminator graph is reachable, the python emitter keeps it, and the resulting client exports the full Compute family. Kashif's GA TSP was verified to produce a complete client.
 
-**Why we can't just back-apply the GA template.** The GA model uses `Azure.ResourceManager.ProxyResource<Compute>`. Our 11 preview / legacy versions were converted from a swagger that uses `Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation` (the legacy ARM template), with `location` / `tags` / `sku` re-declared as envelope properties and `ManagedServiceIdentityProperty` as the identity mixin. The on-the-wire ARM envelope for these older versions may legitimately differ from GA — preview / legacy versions are frozen snapshots — so a unilateral switch to the GA template risks a wire change we can't validate.
+**Why we can't just back-apply the GA template.** The GA model uses `Azure.ResourceManager.ProxyResource<Compute>`. The blocked preview versions were converted from a swagger that uses `Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation` (the legacy ARM template), with `location` / `tags` / `sku` re-declared as envelope properties and `ManagedServiceIdentityProperty` as the identity mixin. The on-the-wire ARM envelope for these older versions may legitimately differ from GA — preview / legacy versions are frozen snapshots — so a unilateral switch to the GA template risks a wire change we can't validate.
 
 The mechanically-reusable bits from the GA TSP that can be applied regardless of the eventual envelope template choice are the two `#suppress` directives on the `ComputeResource` model declaration:
 
@@ -152,24 +151,24 @@ The mechanically-reusable bits from the GA TSP that can be applied regardless of
 #suppress "@azure-tools/typespec-client-generator-core/legacy-hierarchy-building-conflict" "..."
 ```
 
-> **Question for service team:** For each affected preview / legacy API version (`2022-01` through `2025-01` — at minimum the two that block SDK migration today, `2023-08` and `2024-01`), please confirm the correct ARM envelope wiring so we can replace the converter's `<{}>` placeholder with a body type that re-attaches the `Compute` discriminated union. Specifically: (a) which TypeSpec template (`TrackedResourceWithOptionalLocation<ComputeResourceSchema>` to match the existing swagger semantics? `ProxyResource<Compute>` like GA? something else?), (b) whether `location` / `tags` / `sku` belong on the envelope for THAT version, and (c) which identity mixin applies (`ManagedServiceIdentityProperty`, the legacy variant, or none). Once those decisions are confirmed per version, the regenerated python client picks the Compute hierarchy back up automatically and the SDK migration unblocks with zero entity-layer changes.
+> **Question for service team:** For each blocked preview API version (`2023-08-01-preview` and `2024-01-01-preview`), please confirm the correct ARM envelope wiring so we can replace the converter's `<{}>` placeholder with a body type that re-attaches the `Compute` discriminated union. Specifically: (a) which TypeSpec template (`TrackedResourceWithOptionalLocation<ComputeResourceSchema>` to match the existing swagger semantics? `ProxyResource<Compute>` like GA? something else?), (b) whether `location` / `tags` / `sku` belong on the envelope for THAT version, and (c) which identity mixin applies (`ManagedServiceIdentityProperty`, the legacy variant, or none). Once those decisions are confirmed per version, the regenerated python client picks the Compute hierarchy back up automatically and the SDK migration unblocks with zero entity-layer changes.
 
 Full TSP / swagger excerpts: see [appendix](#issue-3-evidence).
 
 ---
 
-## Issue 4 — `2025-01-01-preview` 10× `duplicate-operation` + 2× `missing-paging-items`
+## Issue 4 — `2025-01-01-preview` `duplicate-operation` + `missing-paging-items`
 
-`tsp compile` on the v2025-01 folder fails with **12 errors** (verbatim from `_compile-errors.log` in `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/`):
+`tsp compile` on the v2025-01 folder fails (verbatim from `_compile-errors.log` in `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/`):
 
-- **10× `@typespec/http/duplicate-operation`** — 5 unique `(URL, verb)` pairs where two sibling interfaces each register an operation:
+- **`@typespec/http/duplicate-operation`** — 5 unique `(URL, verb)` pairs where two sibling interfaces each register an operation:
   1. `GET /subscriptions/{}/resourceGroups/{}/providers/Microsoft.MachineLearningServices/workspaces/{}/features` — `Workspace.list` (Workspace.tsp:135) vs `Feature.list` (Feature.tsp:37).
   2. `GET .../workspaces/{}/endpoints/{endpointName}` — `InferenceEndpoint.get` (InferenceEndpoint.tsp:40) vs `EndpointResourcePropertiesBasicResource.get` (EndpointResourcePropertiesBasicResource.tsp:33).
   3. `PUT .../workspaces/{}/endpoints/{endpointName}` — `InferenceEndpoint.createOrUpdate` (InferenceEndpoint.tsp:45) vs `EndpointResourcePropertiesBasicResource.createOrUpdate` (EndpointResourcePropertiesBasicResource.tsp:41).
   4. `GET .../workspaces/{}/endpoints` — `InferenceEndpoint.list` (InferenceEndpoint.tsp:68) vs `EndpointResourcePropertiesBasicResource.list` (EndpointResourcePropertiesBasicResource.tsp:55).
   5. `POST .../workspaces/{}/groups/{groupName}/getStatus` — `InferenceGroup.getStatus` (InferenceGroup.tsp:142) vs `InferenceGroup.getDeltaModelsStatusAsync` (InferenceGroup.tsp:111).
 
-- **2× `@typespec/http/missing-paging-items`** — paged operations whose return type is missing the `@pageItems` annotation:
+- **`@typespec/http/missing-paging-items`** — 2 paged operations whose return type is missing the `@pageItems` annotation:
   1. `InferenceGroup.tsp:122 listDeltaModelsAsync` (`ArmResourceActionSync<...>`).
   2. `RaiBlocklistPropertiesBasicResource.tsp:93 addBulk` (`ArmResourceActionAsync<...>`).
 
@@ -410,7 +409,7 @@ model ComputeResource
 }
 ```
 
-The `<{}>` is the empty-body template parameter. The same `FIXME` comment appears at line 14 of every one of the 11 versioned `ComputeResource.tsp` files (verified by `Select-String -Path docs/generated-tsp/**/ComputeResource.tsp -Pattern "FIXME: ComputeResource"` returning 11 matches).
+The `<{}>` is the empty-body template parameter. The same `FIXME` comment + empty body is present on `ComputeResource.tsp` for both blocked versions.
 
 #### Reference — GA, hand-authored `MachineLearningServices.Management/ComputeResource.tsp` (the working pattern)
 
@@ -463,7 +462,7 @@ The 137 missing exports are almost entirely `Compute` family members plus a hand
 
 ### Issue 4 evidence
 
-The 12 errors below are the full verbatim contents of `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/_compile-errors.log` (formatting normalized for readability):
+The errors below are the full verbatim contents of `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/_compile-errors.log` (formatting normalized for readability):
 
 ```
 docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp:122:3 - error missing-paging-items: Paged operation 'listDeltaModelsAsync' return type must have a property annotated with @pageItems.
