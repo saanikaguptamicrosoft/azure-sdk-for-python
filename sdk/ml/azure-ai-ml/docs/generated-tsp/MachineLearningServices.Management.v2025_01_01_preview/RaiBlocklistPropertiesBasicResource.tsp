@@ -88,7 +88,6 @@ interface RaiBlocklistPropertiesBasicResources {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("ConnectionRaiBlocklistItem_AddBulk")
-  @list
   @action("addRaiBlocklistItems")
   addBulk is ArmResourceActionAsync<
     RaiBlocklistPropertiesBasicResource,

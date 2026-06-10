@@ -8308,6 +8308,7 @@ model StringArmPaginatedResult {
   /**
    * An array of objects of type String.
    */
+  @pageItems
   value?: string[];
 }
 

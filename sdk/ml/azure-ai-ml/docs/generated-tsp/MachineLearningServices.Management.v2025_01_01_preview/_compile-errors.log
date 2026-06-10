@@ -1,46 +1,44 @@
-TypeSpec compiler v1.12.0
+TypeSpec compiler v1.13.0
 
 - Compiling...
 ├ù Compiling
 Diagnostics were reported during compilation:
 
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m122[39m:[33m3[39m - [31merror[39m [90mmissing-paging-items[39m: Paged operation 'listDeltaModelsAsync' return type must have a property annotated with @pageItems.
-> 122 |   listDeltaModelsAsync is ArmResourceActionSync<
-      |   ^^^^^^^^^^^^^^^^^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m93[39m:[33m3[39m - [31merror[39m [90mmissing-paging-items[39m: Paged operation 'addBulk' return type must have a property annotated with @pageItems.
-> 93 |   addBulk is ArmResourceActionAsync<
-     |   ^^^^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Workspace.tsp[39m:[33m135[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
+[33mwarning[39m [90mcompiler-version-mismatch[39m: Current TypeSpec compiler conflicts with local version of @typespec/compiler referenced in C:/workspace/azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview. 
+If this warning occurs on the command line, try running `typespec` with a working directory of C:/workspace/azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview. 
+If this warning occurs in the IDE, try configuring the `tsp-server` path to C:/workspace/azure-rest-api-specs/node_modules/@typespec/compiler.
+  Expected: C:/Users/saanikagupta/AppData/Local/npm-cache/_npx/fb41b4d925aabf51/node_modules/@typespec/compiler
+  Resolved: C:/workspace/azure-rest-api-specs/node_modules/@typespec/compiler
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Workspace.tsp[39m:[33m135[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
 > 135 |   list is ArmResourceActionSync<
       |   ^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Feature.tsp[39m:[33m37[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Feature.tsp[39m:[33m37[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
 > 37 |   list is ArmResourceListByParent<
      |   ^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m40[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "get" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m40[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "get" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
 > 40 |   get is ArmResourceRead<InferenceEndpoint>;
      |   ^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m33[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "get" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m33[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "get" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
 > 33 |   get is ArmResourceRead<EndpointResourcePropertiesBasicResource>;
      |   ^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m45[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "createOrUpdate" routed at "put /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m45[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "createOrUpdate" routed at "put /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
 > 45 |   createOrUpdate is ArmResourceCreateOrReplaceAsync<InferenceEndpoint>;
      |   ^^^^^^^^^^^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m41[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "createOrUpdate" routed at "put /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m41[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "createOrUpdate" routed at "put /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
 > 41 |   createOrUpdate is ArmResourceCreateOrReplaceAsync<
      |   ^^^^^^^^^^^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m68[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m68[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints".
 > 68 |   list is ArmResourceListByParent<
      |   ^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m55[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m55[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints".
 > 55 |   list is ArmResourceListByParent<
      |   ^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m111[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "getDeltaModelsStatusAsync" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m111[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "getDeltaModelsStatusAsync" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
 > 111 |   getDeltaModelsStatusAsync is ArmResourceActionSync<
       |   ^^^^^^^^^^^^^^^^^^^^^^^^^
-[36mdocs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m142[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "getStatus" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
+[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m142[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "getStatus" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
 > 142 |   getStatus is ArmResourceActionSync<
       |   ^^^^^^^^^
 
-Found 12 errors.
-
+Found 10 errors, 1 warning.
 
