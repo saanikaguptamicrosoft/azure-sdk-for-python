@@ -4,22 +4,31 @@
 
 Delta refers to difference between local swagger copy in azure-ai-ml vs upstream swagger spec in Azure/azure-rest-api-specs.
 
+We checked deltas at two levels:
+
+1. **Entirely missing types** — types the SDK imports that have no definition at all in the upstream spec.
+2. **Field-level drift** — types that exist in both local and upstream but whose field set / shape differs in a way the SDK relies on.
+
 For each delta we need one of two answers from the service team:
 
-- **Add the type(s) to the upstream spec** — preferred when the feature is real and supported; we then regenerate and the SDK keeps working unchanged.
-- **Remove the feature from the SDK** — when the type was never officially part of the API contract.
+- **Add the type / field to the upstream spec** — preferred when the feature is real and supported; we then regenerate and the SDK keeps working unchanged.
+- **Remove the feature from the SDK** — when the type / field was never officially part of the API contract.
 
 ---
 
 ## Summary
 
-| # | API version | Types consumed by SDK but missing upstream | Count | Owning SDK file |
+| # | API version | What's missing / different in upstream | Count | Owning SDK file |
 |---:|---|---|---:|---|
-| 1 | `2022-01-01-preview` | `ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword` (and their base `Credentials`) | 5 (+1 base) | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
-| 2 | `2022-10-01-preview` | `UserCreatedAcrAccount`, `UserCreatedStorageAccount` | 2 | [entities/_registry/registry_support_classes.py](../azure/ai/ml/entities/_registry/registry_support_classes.py), [entities/_registry/util.py](../azure/ai/ml/entities/_registry/util.py) |
-| 3 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` | 1 | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
+| 1 | `2022-01-01-preview` | `ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword` (and their base `Credentials`) — entirely missing | 5 (+1 base) | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
+| 2 | `2022-10-01-preview` | `UserCreatedAcrAccount`, `UserCreatedStorageAccount` — entirely missing; plus parent properties `AcrDetails.userCreatedAcrAccount` and `StorageAccountDetails.userCreatedStorageAccount` also missing | 2 types + 2 fields | [entities/_registry/registry_support_classes.py](../azure/ai/ml/entities/_registry/registry_support_classes.py), [entities/_registry/util.py](../azure/ai/ml/entities/_registry/util.py) |
+| 3 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` — entirely missing | 1 | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
+| 4 | `2022-10-01-preview` | `Registry.managedResourceGroupTags` — field present locally and actively written by SDK, missing in upstream | 1 field | [entities/_registry/registry.py](../azure/ai/ml/entities/_registry/registry.py) |
+| 5 | `2024-04-01-preview` | `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` — disagrees with upstream on credential type (local uses `WorkspaceConnectionSharedAccessSignature{sas}`, upstream uses `WorkspaceConnectionAccountKey{key}`) | 1 field | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
 
-**Total: 8 types across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
+**Total: 8 entirely-missing types + 3 field-level disagreements across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
+
+**Audit coverage.** The field-level drift analysis ran across all 15 preview API versions consumed by this SDK. The 3 versions currently in spec PR [#43817](https://github.com/Azure/azure-rest-api-specs/pull/43817) (`2020-09-01-dataplanepreview`, `2022-02-01-preview`, `2023-02-01-preview`) and the 2 already-merged versions (`2024-07-01-preview`, `2024-10-01-preview`) were verified to have no SDK-impacting field-level drift — see [Versions verified field-level clean](#versions-verified-field-level-clean) for the audit detail.
 ---
 
 ## Delta 1 — `2022-01-01-preview` workspace-connection auth credentials
@@ -53,6 +62,80 @@ The same subtype **is** present in the upstream swaggers for `2024-01-01-preview
 > **Question for service team:** Was the removal of `OpenAIEndpointDeploymentResourceProperties` from `2024-04-01-preview` intentional? If it was a regression, please add it back so it matches `2024-01` and `2024-07`. If intentional, please advise what the SDK should use on `2024-04` instead.
 
 Field-level schemas: see [appendix](#delta-3-schemas).
+
+---
+
+## Delta 4 — `2022-10-01-preview` `Registry.managedResourceGroupTags`
+
+The local copy of `Registry` (aka `RegistryProperties`) has a `managedResourceGroupTags` property:
+
+```json
+"managedResourceGroupTags": {
+  "description": "Tags to be applied to the managed resource group associated with this registry.",
+  "type": "object",
+  "additionalProperties": { "type": "string", "x-nullable": true }
+}
+```
+
+The upstream `Registry` has every other field but is missing this one.
+
+The SDK actively writes this field at [entities/_registry/registry.py:230](../azure/ai/ml/entities/_registry/registry.py#L230):
+
+```python
+managed_resource_group_tags=self.tags
+```
+
+Users who set `tags=...` on a `Registry` expect those tags to flow through to the managed resource group; without this field upstream, the property would be silently dropped from the request after we regenerate.
+
+> **Question for service team:** Is `Registry.managedResourceGroupTags` an intentional part of the `2022-10-01-preview` contract? If yes, please add it to the upstream `Registry` (a.k.a. `RegistryProperties`) definition. If no, we will remove `managed_resource_group_tags=self.tags` from `_registry/registry.py` and stop forwarding user tags to the managed resource group on this version.
+
+Field-level schemas: see [appendix](#delta-4-schemas).
+
+---
+
+## Delta 5 — `2024-04-01-preview` `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` shape disagreement
+
+`AccountKeyAuthTypeWorkspaceConnectionProperties` is the discriminator subtype of `WorkspaceConnectionPropertiesV2` used when a workspace connection uses `authType == "AccountKey"`. Local and upstream disagree on the type of its `credentials` field:
+
+| Source | `credentials.$ref` | Field shape |
+|---|---|---|
+| **Local** | `WorkspaceConnectionSharedAccessSignature` | `{ "sas": string }` |
+| **Upstream** | `WorkspaceConnectionAccountKey` | `{ "key": string, "x-ms-secret": true }` |
+
+The SDK (`entities/_credentials.py`) builds the request using the local shape — `RestWorkspaceConnectionSharedAccessSignature(sas=self.account_key)` — i.e. it puts the user's account key into a field called `sas`. Upstream expects it in a field called `key`.
+
+This means one of two things is true:
+
+- **The local back-port is wrong** — the SDK is currently sending `{ "credentials": { "sas": "<account_key>" } }` for an AccountKey auth, and the service is presumably reading the value out of the wrong field name (or silently dropping it). If we regenerate against upstream the SDK will switch to the correct `key` field but `_credentials.py` will need to be updated to match (`RestWorkspaceConnectionAccountKey(key=self.account_key)`).
+- **The upstream is wrong** — the service actually reads `sas`, and the upstream's `WorkspaceConnectionAccountKey{key}` shape is dead code.
+
+> **Question for service team:** What is the on-the-wire field name the service reads for AccountKey-auth workspace connections on `2024-04-01-preview`: `sas` or `key`? Whichever is correct, please align the spec to it. If `key` is correct (most likely), we will update the SDK to use `WorkspaceConnectionAccountKey` after regen.
+
+Field-level schemas: see [appendix](#delta-5-schemas).
+
+---
+
+## Versions verified field-level clean
+
+The field-level audit ran across all 15 preview API versions the SDK currently consumes. For the 5 versions already in flight (3 in the active spec PR, 2 already merged), the audit found zero SDK-impacting drift. Detail per version:
+
+| API version | Status | Total field-level mismatches | SDK-impacting | Notes |
+|---|---|---:|---:|---|
+| `2020-09-01-dataplanepreview` | In PR #43817 | n/a | 0 | Upstream has no copy of this version; SDK uses the local-only swagger as-is. |
+| `2022-02-01-preview` | In PR #43817 | 54 (structural) | 0 | None of the diffs land on types the SDK imports. |
+| `2023-02-01-preview` | In PR #43817 | 8 (structural) | 0 | None of the diffs land on types the SDK imports. |
+| `2024-07-01-preview` | Merged | 4 (structural) | 0 | None of the diffs land on types the SDK imports. |
+| `2024-10-01-preview` | Merged | 93 (structural) | 6 — all verified benign | See breakdown below. |
+
+**`2024-10-01-preview` (merged) — the 6 SDK-touching mismatches, all benign:**
+
+1. `Workspace` and `OutboundRuleBasicResource` — local extends `Resource`, upstream extends `ProxyResource`. Both re-declare `location`, `tags`, `kind` etc. directly, so the field set seen by the SDK is identical.
+2. `DiagnoseResponseResult` — local inlines 9 result-array properties; upstream factors the same 9 properties into a named `DiagnoseResponseResultValue`. Wire payload is byte-for-byte identical.
+3. `DiagnoseResult` — upstream drops `x-ms-mutability` annotations (codegen hint only).
+4. `ListWorkspaceKeysResult` — upstream uses `format: password` instead of `x-ms-mutability` (both are codegen / docs hints; wire is identical).
+5. `ManagedNetworkSettings` — local has `changeableIsolationModes` and `status` that upstream lacks. Verified that no SDK code reads either property (only `isolation_mode`, `firewall_sku`, `outbound_rules`, `network_id` are accessed, and all four are present in upstream).
+
+No service-team action is needed for the in-flight PR or for the merged versions on field-level grounds.
 
 ---
 
@@ -238,3 +321,106 @@ Lives in `2024-04-01-preview/workspaceRP.json`.
 This is a discriminator subtype of `EndpointDeploymentResourceProperties` (which is present upstream). The discriminator field on the parent is matched against `"Azure.OpenAI"` to select this subtype. It also re-uses the field set from `CognitiveServiceEndpointDeploymentResourceProperties` (also present upstream) via `allOf` — so the subtype itself adds no new fields, only a new discriminator value plus the inherited fields from the two parents.
 
 The minimal fix is to re-add this empty-body subtype with `x-ms-discriminator-value: "Azure.OpenAI"` to the `2024-04-01-preview` swagger. Both parent types are already in the spec, so no other changes are needed.
+
+---
+
+### Delta 4 schemas
+
+Lives in `2022-10-01-preview/registries.json`. The full local `Registry` (a.k.a. `RegistryProperties`) — the missing field is `managedResourceGroupTags`.
+
+#### `Registry` (local) — missing `managedResourceGroupTags` upstream
+
+```json
+{
+  "description": "Details of the Registry",
+  "type": "object",
+  "allOf": [
+    { "$ref": "#/definitions/ResourceBase" }
+  ],
+  "properties": {
+    "publicNetworkAccess":           { "type": "string", "x-nullable": true },
+    "discoveryUrl":                  { "type": "string", "x-nullable": true },
+    "intellectualPropertyPublisher": { "type": "string", "x-nullable": true },
+    "managedResourceGroup": {
+      "description": "Managed resource group created for the registry",
+      "$ref": "#/definitions/ArmResourceId",
+      "x-nullable": true
+    },
+    "mlFlowRegistryUri":             { "type": "string", "x-nullable": true },
+    "privateLinkCount":              { "format": "int32", "type": "integer" },
+    "regionDetails": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/RegistryRegionArmDetails" },
+      "x-ms-identifiers": [],
+      "x-nullable": true
+    },
+    "managedResourceGroupTags": {
+      "description": "Tags to be applied to the managed resource group associated with this registry.",
+      "type": "object",
+      "additionalProperties": { "type": "string", "x-nullable": true }
+    }
+  },
+  "x-ms-client-name": "RegistryProperties",
+  "additionalProperties": false
+}
+```
+
+All properties except the last one (`managedResourceGroupTags`) are already in the upstream copy. The minimal fix is to add the one property to upstream `Registry` / `RegistryProperties`.
+
+Also note (covered by Delta 2): the parent containers `AcrDetails` and `StorageAccountDetails` in this same version are missing the `userCreatedAcrAccount` and `userCreatedStorageAccount` properties respectively — both required by the Delta 2 fix. When adding the `UserCreated*` types upstream, please also add these properties to their parent containers.
+
+---
+
+### Delta 5 schemas
+
+All schemas below live in `2024-04-01-preview/workspaceRP.json`.
+
+#### `AccountKeyAuthTypeWorkspaceConnectionProperties` — local
+
+```json
+{
+  "type": "object",
+  "x-ms-discriminator-value": "AccountKey",
+  "allOf": [ { "$ref": "#/definitions/WorkspaceConnectionPropertiesV2" } ],
+  "properties": {
+    "credentials": { "$ref": "#/definitions/WorkspaceConnectionSharedAccessSignature" }
+  }
+}
+```
+
+#### `AccountKeyAuthTypeWorkspaceConnectionProperties` — upstream
+
+```json
+{
+  "type": "object",
+  "x-ms-discriminator-value": "AccountKey",
+  "allOf": [ { "$ref": "#/definitions/WorkspaceConnectionPropertiesV2" } ],
+  "properties": {
+    "credentials": { "$ref": "#/definitions/WorkspaceConnectionAccountKey" }
+  }
+}
+```
+
+#### `WorkspaceConnectionSharedAccessSignature` (local — what SDK currently sends)
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "sas": { "type": "string" }
+  }
+}
+```
+
+#### `WorkspaceConnectionAccountKey` (upstream — what upstream expects)
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "key": { "type": "string", "x-ms-secret": true }
+  }
+}
+```
+
+The fix is whichever of the two is the truth on the wire. If the service reads `key` (most likely), the upstream is already correct and the SDK needs to update `_credentials.py` to use `WorkspaceConnectionAccountKey(key=...)` post-regen. If the service reads `sas`, the upstream's `WorkspaceConnectionAccountKey` is dead code and the local back-port is the source of truth.
