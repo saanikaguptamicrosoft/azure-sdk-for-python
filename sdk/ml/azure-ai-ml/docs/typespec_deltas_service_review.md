@@ -18,15 +18,17 @@ For each delta we need one of two answers from the service team:
 
 ## Summary
 
+The `#` column matches the `Delta N` section heading below (and is the cross-doc identifier referenced from [typespec_generation_status.md](typespec_generation_status.md) and [typespec_migration_status.md](typespec_migration_status.md)). Rows are grouped by API version for navigation.
+
 | # | API version | What's missing / different in upstream | Count | Owning SDK file |
 |---:|---|---|---:|---|
-| 1 | `2022-01-01-preview` | `ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword` (and their base `Credentials`) — entirely missing | 5 (+1 base) | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
+| 1 | `2022-01-01-preview` | `ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword` (and their base `Credentials`) — entirely missing | 6 types | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
 | 2 | `2022-10-01-preview` | `UserCreatedAcrAccount`, `UserCreatedStorageAccount` — entirely missing; plus parent properties `AcrDetails.userCreatedAcrAccount` and `StorageAccountDetails.userCreatedStorageAccount` also missing | 2 types + 2 fields | [entities/_registry/registry_support_classes.py](../azure/ai/ml/entities/_registry/registry_support_classes.py), [entities/_registry/util.py](../azure/ai/ml/entities/_registry/util.py) |
-| 3 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` — entirely missing | 1 | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
 | 4 | `2022-10-01-preview` | `Registry.managedResourceGroupTags` — field present locally and actively written by SDK, missing in upstream | 1 field | [entities/_registry/registry.py](../azure/ai/ml/entities/_registry/registry.py) |
+| 3 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` — entirely missing | 1 type | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
 | 5 | `2024-04-01-preview` | `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` — disagrees with upstream on credential type (local uses `WorkspaceConnectionSharedAccessSignature{sas}`, upstream uses `WorkspaceConnectionAccountKey{key}`) | 1 field | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
 
-**Total: 8 entirely-missing types + 3 field-level disagreements across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
+**Total: 9 entirely-missing types (including the shared `Credentials` base) + 4 field-level disagreements across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
 ---
 
 ## Delta 1 — `2022-01-01-preview` workspace-connection auth credentials
