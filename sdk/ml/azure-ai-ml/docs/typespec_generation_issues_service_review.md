@@ -9,10 +9,10 @@ We classify them into two levels:
 1. **Compile-time errors** — TSP rejects the generated source. Either a discriminator value collides between sibling subtypes, or sibling interfaces register the same `(URL, verb)` pair.
 2. **Silent generator defects** — TSP compiles, but the converter could not faithfully reproduce a swagger construct (an `allOf` mixin, in our case), leaving downstream models orphaned. The python emitter then prunes them, so the regenerated client is missing types the SDK imports — caught only by comparing `len(<tsp>.models.__all__)` against `len(<autorest>.models.__all__)`.
 
-For each issue we need one of two answers from the service team:
+For each issue we need one of two answers from the service team. Both calls are the service team's to make — the SDK can't tell whether a swagger artefact is a live contract or an orphan back-port:
 
-- **Fix it upstream in the spec** — preferred when the affected operation / type is real and supported; we then regenerate and the SDK keeps working unchanged.
-- **Drop the feature** — when the offending operation / type is a dead back-port or has been superseded by a newer one. The SDK is then refactored off it.
+- **Fix it upstream in the spec** — when the affected operation / type is part of the supported contract for that API version. We then regenerate and the SDK keeps working unchanged.
+- **Confirm the SDK can stop consuming it** — when the service team confirms the operation / type was never wired through end-to-end (e.g. a back-port that landed in swagger but no live service ever accepted it, or one superseded by a newer artefact). The SDK then removes its own references to it — the service-side definition does not need to change.
 
 ---
 
@@ -40,7 +40,7 @@ The autorest converter / TSP compiler rejects this — two subtypes cannot regis
 
 The only mechanical fix on the spec side is to rename one of the two subtypes' discriminator values (e.g. `"Id"` → `"ResourceManagementId"` on `ResourceManagementAssetReference`). Because the discriminator value is part of the on-the-wire JSON body, this is a **wire-affecting change** — the service must accept the new value.
 
-> **Question for service team:** Is `ResourceManagementAssetReferenceDetails` a supported part of the `2021-10-01-dataplanepreview` contract? If yes, please rename its `referenceType` discriminator value upstream (e.g. to `"ResourceManagementId"`) and update the service to accept the new value — we will then regen and the SDK keeps working unchanged. If it was a back-port that was never wired through end-to-end, we will remove the SDK code that builds it.
+> **Question for service team:** Is `ResourceManagementAssetReferenceDetails` a supported part of the `2021-10-01-dataplanepreview` contract that the service actually accepts on the wire? If yes, please rename its `referenceType` discriminator value upstream (e.g. to `"ResourceManagementId"`) and update the service to accept the new value — we will then regen and the SDK keeps working unchanged. If you confirm it was a back-port that no live service accepts, the SDK will remove the code that builds it (no service-side change needed).
 
 Field-level schemas + the colliding discriminator excerpt: see [appendix](#issue-1-schemas).
 
@@ -61,7 +61,7 @@ The SDK actively imports types from the `DataImport` cluster on every blocked ve
 
 The mechanical fix on the spec side is to rename the `DataImport` family's discriminator value upstream so both branches survive (e.g. `"uri_folder"` → `"data_import"`). Like Issue 1, that is on-the-wire — the service must accept the new value.
 
-> **Question for service team:** Is the `DataImport` family (`DataImport`, `DataImportSource`, `DatabaseSource`, `FileSystemSource`, `ImportDataAction`) a supported part of `2023-04-01-preview` / `2023-06-01-preview` / `2024-04-01-preview`? If yes, please pick a unique `dataType` discriminator value for it (e.g. `"data_import"`) and update the service to read the new value. If no, we will drop the SDK's data-import code path on these versions and re-route consumers to a newer version that doesn't carry the back-port.
+> **Question for service team:** Is the `DataImport` family (`DataImport`, `DataImportSource`, `DatabaseSource`, `FileSystemSource`, `ImportDataAction`) a supported part of `2023-04-01-preview` / `2023-06-01-preview` / `2024-04-01-preview` that the service actually accepts on the wire? If yes, please pick a unique `dataType` discriminator value for it (e.g. `"data_import"`) and update the service to read the new value. If you confirm no live service on these versions accepts the `DataImport` family, the SDK will drop its data-import code path on these versions and re-route consumers to a newer version that doesn't carry the back-port (no service-side change needed).
 
 Field-level schemas + the colliding discriminator excerpts: see [appendix](#issue-2-schemas).
 
