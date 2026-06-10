@@ -22,9 +22,10 @@ That means **every issue below has to be fixed on the spec side**. The service t
 | 1 | Discriminator collision on `AssetReferenceBase.referenceType` — value `"Id"` shared by `IdAssetReference` and `ResourceManagementAssetReferenceDetails` | `2021-10-01-dataplanepreview` | TSP compile fails; SDK consumes `ResourceManagementAssetReferenceDetails` from this version | [entities/_assets/workspace_asset_reference.py](../azure/ai/ml/entities/_assets/workspace_asset_reference.py) |
 | 2 | Discriminator collision on `DataVersionBaseProperties.dataType` — value `"uri_folder"` shared by `UriFolderDataVersion` and `DataImport` | `2023-04-01-preview`, `2023-06-01-preview`, `2024-04-01-preview` | TSP compile fails; SDK consumes `DataImport` on each affected version | [entities/_data_import/data_import.py](../azure/ai/ml/entities/_data_import/data_import.py), [entities/_data_import/schedule.py](../azure/ai/ml/entities/_data_import/schedule.py) |
 | 3 | Converter emits `// FIXME: ComputeResource has no properties property` + empty `<{}>` body on `ComputeResource.tsp`; the `Compute` discriminated union and ~137 subtype models become orphans and the python emitter prunes them | `2023-08-01-preview`, `2024-01-01-preview` | TSP compiles but regenerated client is missing `ComputeInstance`, `ComputeInstanceProperties`, `ComputeInstanceSshSettings`, `ComputeInstanceDataMount`, `AssignedUser`, `PersonalComputeInstanceSettings` and the rest of the Compute family → `ImportError` at SDK module load | [entities/_compute/compute_instance.py](../azure/ai/ml/entities/_compute/compute_instance.py), [operations/_data_operations.py](../azure/ai/ml/operations/_data_operations.py), [operations/_datastore_operations.py](../azure/ai/ml/operations/_datastore_operations.py) |
-| 4 | `@typespec/http/duplicate-operation` on 5 unique `(path, verb)` pairs + `@typespec/http/missing-paging-items` on 2 paged operations | `2025-01-01-preview` | TSP compile fails | [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py) |
+| 4 | Sibling-interface route conflict (`@typespec/http/duplicate-operation`) — 5 unique `(verb, path)` pairs each registered by two interfaces | `2025-01-01-preview` | TSP compile fails; two interfaces claim the same wire endpoint → cannot emit an unambiguous client | [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py) |
+| 5 | Missing `@pageItems` annotation (`@typespec/http/missing-paging-items`) on 2 paged operations | `2025-01-01-preview` | TSP compile fails; emitter cannot identify the paged-item array on the operation's return type | [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py) |
 
-**Total: 4 distinct TSP-generation issues blocking 7 API versions** (`2021-10-01-dataplanepreview`, `2023-04-01-preview`, `2023-06-01-preview`, `2023-08-01-preview`, `2024-01-01-preview`, `2024-04-01-preview`, `2025-01-01-preview`). Full schema / TSP / error definitions in the [appendix](#appendix--full-evidence).
+**Total: 5 distinct TSP-generation issues blocking 7 API versions** (`2021-10-01-dataplanepreview`, `2023-04-01-preview`, `2023-06-01-preview`, `2023-08-01-preview`, `2024-01-01-preview`, `2024-04-01-preview`, `2025-01-01-preview`). Full schema / TSP / error definitions in the [appendix](#appendix--full-evidence).
 
 ---
 
@@ -157,24 +158,21 @@ Full TSP / swagger excerpts: see [appendix](#issue-3-evidence).
 
 ---
 
-## Issue 4 — `2025-01-01-preview` `duplicate-operation` + `missing-paging-items`
+## Issue 4 — `2025-01-01-preview` sibling-interface route conflict (`duplicate-operation`)
 
-`tsp compile` on the v2025-01 folder fails (verbatim from `_compile-errors.log` in `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/`):
+`tsp compile` on the v2025-01 folder reports `@typespec/http/duplicate-operation` on 5 unique `(verb, path)` pairs — each pair has two sibling interfaces registering an operation on the same wire endpoint (verbatim from `_compile-errors.log` in `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/`):
 
-- **`@typespec/http/duplicate-operation`** — 5 unique `(URL, verb)` pairs where two sibling interfaces each register an operation:
-  1. `GET /subscriptions/{}/resourceGroups/{}/providers/Microsoft.MachineLearningServices/workspaces/{}/features` — `Workspace.list` (Workspace.tsp:135) vs `Feature.list` (Feature.tsp:37).
-  2. `GET .../workspaces/{}/endpoints/{endpointName}` — `InferenceEndpoint.get` (InferenceEndpoint.tsp:40) vs `EndpointResourcePropertiesBasicResource.get` (EndpointResourcePropertiesBasicResource.tsp:33).
-  3. `PUT .../workspaces/{}/endpoints/{endpointName}` — `InferenceEndpoint.createOrUpdate` (InferenceEndpoint.tsp:45) vs `EndpointResourcePropertiesBasicResource.createOrUpdate` (EndpointResourcePropertiesBasicResource.tsp:41).
-  4. `GET .../workspaces/{}/endpoints` — `InferenceEndpoint.list` (InferenceEndpoint.tsp:68) vs `EndpointResourcePropertiesBasicResource.list` (EndpointResourcePropertiesBasicResource.tsp:55).
-  5. `POST .../workspaces/{}/groups/{groupName}/getStatus` — `InferenceGroup.getStatus` (InferenceGroup.tsp:142) vs `InferenceGroup.getDeltaModelsStatusAsync` (InferenceGroup.tsp:111).
+| # | Verb | Path (subscription / RG / provider prefix elided) | Operation A | Operation B |
+|---:|---|---|---|---|
+| 1 | `GET`  | `/workspaces/{ws}/features`                       | `Workspace.list` (Workspace.tsp:135)                          | `Feature.list` (Feature.tsp:37) |
+| 2 | `GET`  | `/workspaces/{ws}/endpoints/{endpointName}`       | `InferenceEndpoint.get` (InferenceEndpoint.tsp:40)            | `EndpointResourcePropertiesBasicResource.get` (EndpointResourcePropertiesBasicResource.tsp:33) |
+| 3 | `PUT`  | `/workspaces/{ws}/endpoints/{endpointName}`       | `InferenceEndpoint.createOrUpdate` (InferenceEndpoint.tsp:45) | `EndpointResourcePropertiesBasicResource.createOrUpdate` (EndpointResourcePropertiesBasicResource.tsp:41) |
+| 4 | `GET`  | `/workspaces/{ws}/endpoints`                      | `InferenceEndpoint.list` (InferenceEndpoint.tsp:68)           | `EndpointResourcePropertiesBasicResource.list` (EndpointResourcePropertiesBasicResource.tsp:55) |
+| 5 | `POST` | `/workspaces/{ws}/groups/{groupName}/getStatus`   | `InferenceGroup.getStatus` (InferenceGroup.tsp:142)           | `InferenceGroup.getDeltaModelsStatusAsync` (InferenceGroup.tsp:111) |
 
-- **`@typespec/http/missing-paging-items`** — 2 paged operations whose return type is missing the `@pageItems` annotation:
-  1. `InferenceGroup.tsp:122 listDeltaModelsAsync` (`ArmResourceActionSync<...>`).
-  2. `RaiBlocklistPropertiesBasicResource.tsp:93 addBulk` (`ArmResourceActionAsync<...>`).
+These errors are **not converter artefacts** — they reflect genuine swagger-design ambiguity where two sibling resource interfaces both claim the same `(path, verb)` pair. They will not go away by re-running the converter; the spec itself needs to disambiguate the routes.
 
-The duplicate-operation errors are **not converter artefacts** — they reflect genuine swagger-design ambiguity where two sibling resource interfaces both claim the same `(path, verb)` pair. They will not go away by re-running the converter; the spec itself needs to disambiguate the routes. The paging errors are similar — `@pageItems` is a TypeSpec-side annotation that has to be added to the offending operations' return types.
-
-Mechanical fix options on the spec side (for the duplicate-operation cases): decorate both operations in each colliding pair with `@sharedRoute` (when both genuinely service the same endpoint and the implementation multiplexes on the request body — both TSP-side operations survive and both still emit into the client), or restructure the offending interfaces so each `(path, verb)` pair is unique by giving one side a distinct sub-route (the pattern Kashif's GA TSP uses — both operations survive on distinct wire paths). For the paging cases: annotate the return type with `@pageItems` on the appropriate array property.
+Mechanical fix options on the spec side: decorate both operations in each colliding pair with `@sharedRoute` (when both genuinely service the same endpoint and the implementation multiplexes on the request body — both TSP-side operations survive and both still emit into the client), or restructure the offending interfaces so each `(path, verb)` pair is unique by giving one side a distinct sub-route (the pattern Kashif's GA TSP uses — both operations survive on distinct wire paths).
 
 Note that both patterns preserve **both** colliding operations in the generated client — neither side disappears. Removing a TSP-side declaration would shrink the client surface vs. autorest and break the lossless-migration goal.
 
@@ -182,9 +180,26 @@ The same disambiguation surface is tracked upstream in spec PR [#43779](https://
 
 The SDK actively imports from `v2025-01-01-preview` — `CapabilityHost` (and related types from `_models_py3`) used by [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), and the **latest** `CommandJob` + `JobBase` used by [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_job/to_rest_functions.py](../azure/ai/ml/entities/_job/to_rest_functions.py). None of these consumers depend on the colliding endpoints / features / groups operations directly, but the regenerated client must still export the full v2025-01 surface (the autorest-generated client does today) for downstream re-export to remain lossless.
 
-> **Question for service team:** For each of the 5 colliding `(path, verb)` pairs above, please pick a disambiguation strategy that keeps **both** operations in the generated client: either (a) annotate both with `@sharedRoute` if they are genuinely the same wire endpoint multiplexed on the request body, or (b) restructure one side onto a distinct sub-route (the GA-TSP pattern). And for the 2 paging operations, please confirm which array property on the return type is the paged item — we will then add the `@pageItems` annotation.
+> **Question for service team:** For each of the 5 colliding `(verb, path)` pairs above, please pick a disambiguation strategy that keeps **both** operations in the generated client: either (a) annotate both with `@sharedRoute` if they are genuinely the same wire endpoint multiplexed on the request body, or (b) restructure one side onto a distinct sub-route (the GA-TSP pattern).
 
 Full error log excerpt: see [appendix](#issue-4-evidence).
+
+---
+
+## Issue 5 — `2025-01-01-preview` paged operations missing `@pageItems` (`missing-paging-items`)
+
+`tsp compile` on the v2025-01 folder reports `@typespec/http/missing-paging-items` on 2 operations whose return type does not annotate which array property carries the paged items:
+
+| # | File:line | Operation | Template |
+|---:|---|---|---|
+| 1 | `InferenceGroup.tsp:122`                     | `listDeltaModelsAsync` | `ArmResourceActionSync<...>`  |
+| 2 | `RaiBlocklistPropertiesBasicResource.tsp:93` | `addBulk`              | `ArmResourceActionAsync<...>` |
+
+The mechanical fix on the spec side is to add the `@pageItems` annotation to the appropriate array property on each operation's return-type model. Both operations remain in the generated client — the annotation is metadata-only and does not change the wire contract.
+
+> **Question for service team:** For each of the 2 paged operations above, please confirm which array property on the return type is the paged item — we will then add the `@pageItems` annotation.
+
+Full error log excerpt: see [appendix](#issue-5-evidence).
 
 ---
 
@@ -462,15 +477,9 @@ The 137 missing exports are almost entirely `Compute` family members plus a hand
 
 ### Issue 4 evidence
 
-The errors below are the full verbatim contents of `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/_compile-errors.log` (formatting normalized for readability):
+The 10 `duplicate-operation` errors below are extracted from `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/_compile-errors.log` (formatting normalized for readability):
 
 ```
-docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp:122:3 - error missing-paging-items: Paged operation 'listDeltaModelsAsync' return type must have a property annotated with @pageItems.
-  > 122 |   listDeltaModelsAsync is ArmResourceActionSync<
-
-docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp:93:3 - error missing-paging-items: Paged operation 'addBulk' return type must have a property annotated with @pageItems.
-  >  93 |   addBulk is ArmResourceActionAsync<
-
 docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Workspace.tsp:135:3 - error @typespec/http/duplicate-operation: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
   > 135 |   list is ArmResourceActionSync<
 
@@ -500,6 +509,18 @@ docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Infere
 
 docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp:142:3 - error @typespec/http/duplicate-operation: Duplicate operation "getStatus" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
   > 142 |   getStatus is ArmResourceActionSync<
-
-Found 12 errors.
 ```
+
+### Issue 5 evidence
+
+The 2 `missing-paging-items` errors below are extracted from the same log file:
+
+```
+docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp:122:3 - error missing-paging-items: Paged operation 'listDeltaModelsAsync' return type must have a property annotated with @pageItems.
+  > 122 |   listDeltaModelsAsync is ArmResourceActionSync<
+
+docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp:93:3 - error missing-paging-items: Paged operation 'addBulk' return type must have a property annotated with @pageItems.
+  >  93 |   addBulk is ArmResourceActionAsync<
+```
+
+The full unsplit log (12 errors total) is at `docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/_compile-errors.log`.
