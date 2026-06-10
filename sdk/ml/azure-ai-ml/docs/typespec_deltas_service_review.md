@@ -115,30 +115,6 @@ Field-level schemas: see [appendix](#delta-5-schemas).
 
 ---
 
-## Versions verified field-level clean
-
-The field-level audit ran across all 15 preview API versions the SDK currently consumes. For the 5 versions already in flight (3 in the active spec PR, 2 already merged), the audit found zero SDK-impacting drift. Detail per version:
-
-| API version | Status | Total field-level mismatches | SDK-impacting | Notes |
-|---|---|---:|---:|---|
-| `2020-09-01-dataplanepreview` | In PR #43817 | n/a | 0 | Upstream has no copy of this version; SDK uses the local-only swagger as-is. |
-| `2022-02-01-preview` | In PR #43817 | 54 (structural) | 0 | None of the diffs land on types the SDK imports. |
-| `2023-02-01-preview` | In PR #43817 | 8 (structural) | 0 | None of the diffs land on types the SDK imports. |
-| `2024-07-01-preview` | Merged | 4 (structural) | 0 | None of the diffs land on types the SDK imports. |
-| `2024-10-01-preview` | Merged | 93 (structural) | 6 — all verified benign | See breakdown below. |
-
-**`2024-10-01-preview` (merged) — the 6 SDK-touching mismatches, all benign:**
-
-1. `Workspace` and `OutboundRuleBasicResource` — local extends `Resource`, upstream extends `ProxyResource`. Both re-declare `location`, `tags`, `kind` etc. directly, so the field set seen by the SDK is identical.
-2. `DiagnoseResponseResult` — local inlines 9 result-array properties; upstream factors the same 9 properties into a named `DiagnoseResponseResultValue`. Wire payload is byte-for-byte identical.
-3. `DiagnoseResult` — upstream drops `x-ms-mutability` annotations (codegen hint only).
-4. `ListWorkspaceKeysResult` — upstream uses `format: password` instead of `x-ms-mutability` (both are codegen / docs hints; wire is identical).
-5. `ManagedNetworkSettings` — local has `changeableIsolationModes` and `status` that upstream lacks. Verified that no SDK code reads either property (only `isolation_mode`, `firewall_sku`, `outbound_rules`, `network_id` are accessed, and all four are present in upstream).
-
-No service-team action is needed for the in-flight PR or for the merged versions on field-level grounds.
-
----
-
 ## Appendix — full schemas
 
 The schemas below are extracted verbatim from the SDK's local swagger copy (`docs/swagger-local/.../<version>/<file>.json`). They show exactly what the SDK assumes the wire shape is. Sorted by type name for easy lookup.
