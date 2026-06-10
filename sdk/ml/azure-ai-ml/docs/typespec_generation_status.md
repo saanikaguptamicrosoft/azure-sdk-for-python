@@ -6,14 +6,14 @@
 | 2 | `2021-10-01-dataplanepreview` | 🔴 Blocked | → Issue 1. SDK constructs `ResourceManagementAssetReferenceDetails` (`entities/_assets/workspace_asset_reference.py`). |
 | 3 | `2022-01-01-preview` | 🔴 Blocked | → Delta 1. TSP compiles 0 errors; SDK consumes local-only connection/credential types. |
 | 4 | `2022-02-01-preview` | ✅ Unblocked | 0 errors. |
-| 5 | `2022-10-01-preview` | 🔴 Blocked | → Delta 2. TSP compiles 0 errors; SDK consumes local-only `UserCreatedAcrAccount`/`UserCreatedStorageAccount`. |
+| 5 | `2022-10-01-preview` | 🔴 Blocked | → Delta 2, Delta 4. TSP compiles 0 errors; SDK consumes local-only `UserCreatedAcrAccount`/`UserCreatedStorageAccount` (Delta 2) and writes local-only `Registry.managedResourceGroupTags` (Delta 4). |
 | 6 | `2022-12-01-preview` | 🔴 Blocked | Converges into v2022-10; blocked on row 5. |
 | 7 | `2023-02-01-preview` | ✅ Unblocked | 0 errors. |
 | 8 | `2023-04-01-preview` | 🔴 Blocked | → Issue 2. SDK imports `ImportDataAction` (`entities/_data_import/schedule.py:9`). |
 | 9 | `2023-06-01-preview` | 🔴 Blocked | → Issue 2. SDK imports `DataImport`/`DatabaseSource`/`FileSystemSource` (`entities/_data_import/data_import.py:9-11`). |
 | 10 | `2023-08-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstance`/`ComputeInstanceProperties`/`ComputeInstanceSshSettings` (`entities/_compute/compute_instance.py:13-16`). |
 | 11 | `2024-01-01-preview` | 🔴 Blocked | → Issue 4. SDK imports `ComputeInstanceDataMount` (`operations/_data_operations.py:29`, `operations/_datastore_operations.py:15`). |
-| 12 | `2024-04-01-preview` | 🔴 Blocked | → Delta 3. Mechanical TSP-gen fixes known. |
+| 12 | `2024-04-01-preview` | 🔴 Blocked | → Delta 3, Delta 5. Mechanical TSP-gen fixes known; plus `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` shape disagreement (LOCAL `WorkspaceConnectionSharedAccessSignature{sas}` vs upstream `WorkspaceConnectionAccountKey{key}` — Delta 5). |
 | 13 | `2024-07-01-preview` | ⬜ Merged | |
 | 14 | `2024-10-01-preview` | ⬜ Merged | |
 | 15 | `2025-01-01-preview` | 🔴 Blocked | → Issue 3. 12 errors (10× `duplicate-operation` is the real blocker). |
@@ -34,3 +34,5 @@
 | 1 | SDK constructs `WorkspaceConnectionPropertiesV2` + 7 auth subclasses + 5 credential POCOs (`entities/_credentials.py`, `entities/_workspace/connections/workspace_connection.py`) — local-only back-port. | 3 |
 | 2 | SDK constructs `UserCreatedAcrAccount` + `UserCreatedStorageAccount` (`entities/_registry/registry_support_classes.py:19`, `entities/_registry/util.py:8`) — back-ported into local `registries.json`. | 5 |
 | 3 | SDK uses `OpenAIEndpointDeploymentResourceProperties` + `EndpointDeploymentResourcePropertiesBasicResource` (`entities/_autogen_entities/models/_patch.py:26-27`) — present in v2024-01/v2024-07 swagger but dropped from v2024-04 only (looks like an unintentional regression). | 12 |
+| 4 | SDK writes `Registry.managedResourceGroupTags` (`entities/_registry/registry.py:230`) — field present locally and forwarded to the service, missing in upstream `Registry` / `RegistryProperties`. | 5 |
+| 5 | SDK builds `AccountKeyAuthTypeWorkspaceConnectionProperties` using `RestWorkspaceConnectionSharedAccessSignature(sas=self.account_key)` (`entities/_credentials.py:145`) — LOCAL declares `credentials: WorkspaceConnectionSharedAccessSignature{sas}`, upstream declares `credentials: WorkspaceConnectionAccountKey{key}`. SDK currently sends user's account key in a `sas` field. | 12 |
