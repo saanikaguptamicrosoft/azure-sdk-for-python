@@ -27,8 +27,6 @@ For each delta we need one of two answers from the service team:
 | 5 | `2024-04-01-preview` | `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` — disagrees with upstream on credential type (local uses `WorkspaceConnectionSharedAccessSignature{sas}`, upstream uses `WorkspaceConnectionAccountKey{key}`) | 1 field | [entities/_credentials.py](../azure/ai/ml/entities/_credentials.py) |
 
 **Total: 8 entirely-missing types + 3 field-level disagreements across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
-
-**Audit coverage.** The field-level drift analysis ran across all 15 preview API versions consumed by this SDK. The 3 versions currently in spec PR [#43817](https://github.com/Azure/azure-rest-api-specs/pull/43817) (`2020-09-01-dataplanepreview`, `2022-02-01-preview`, `2023-02-01-preview`) and the 2 already-merged versions (`2024-07-01-preview`, `2024-10-01-preview`) were verified to have no SDK-impacting field-level drift — see [Versions verified field-level clean](#versions-verified-field-level-clean) for the audit detail.
 ---
 
 ## Delta 1 — `2022-01-01-preview` workspace-connection auth credentials
