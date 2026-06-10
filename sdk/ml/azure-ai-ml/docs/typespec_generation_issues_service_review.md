@@ -9,10 +9,9 @@ We classify them into two levels:
 1. **Compile-time errors** — TSP rejects the generated source. Either a discriminator value collides between sibling subtypes, or sibling interfaces register the same `(URL, verb)` pair.
 2. **Silent generator defects** — TSP compiles, but the converter could not faithfully reproduce a swagger construct (an `allOf` mixin, in our case), leaving downstream models orphaned. The python emitter then prunes them, so the regenerated client is missing types the SDK imports — caught only by comparing `len(<tsp>.models.__all__)` against `len(<autorest>.models.__all__)`.
 
-For each issue we need one of two answers from the service team. Both calls are the service team's to make — the SDK can't tell whether a swagger artefact is a live contract or an orphan back-port:
+**Migration goal.** Every preview / legacy API version the SDK currently consumes from autorest must be regeneratable from TSP with an **equivalent client surface** — same operations, same models, same wire contract. Skipping a version or dropping a feature is not on the table: the SDK already ships the surface to customers, and the migration's success criterion is that customer-visible behavior is byte-for-byte preserved.
 
-- **Fix it upstream in the spec** — when the affected operation / type is part of the supported contract for that API version. We then regenerate and the SDK keeps working unchanged.
-- **Confirm the SDK can stop consuming it** — when the service team confirms the operation / type was never wired through end-to-end (e.g. a back-port that landed in swagger but no live service ever accepted it, or one superseded by a newer artefact). The SDK then removes its own references to it — the service-side definition does not need to change.
+That means **every issue below has to be fixed on the spec side**. The service team's only decision per issue is which of the available spec-side fix patterns to apply (rename a discriminator value, restructure an interface, add a `@pageItems` annotation, wire a body type, etc.). The SDK side then absorbs the regen with zero entity-layer changes.
 
 ---
 
@@ -36,11 +35,11 @@ For each issue we need one of two answers from the service team. Both calls are 
 - `IdAssetReference` (uses the standard "look up an asset by ARM resource ID" shape — `{ assetId: string }`).
 - `ResourceManagementAssetReference` (re-exported with `x-ms-client-name: "ResourceManagementAssetReferenceDetails"` — the SDK-visible name). Carries `{ sourceAssetId, destinationName, destinationVersion }` and is used to drive a "copy an asset into the registry" import flow.
 
-The autorest converter / TSP compiler rejects this — two subtypes cannot register the same discriminator value on the same base. The SDK actively constructs `ResourceManagementAssetReferenceDetails` in [entities/_assets/workspace_asset_reference.py](../azure/ai/ml/entities/_assets/workspace_asset_reference.py); it is not dead code.
+The autorest converter / TSP compiler rejects this — two subtypes cannot register the same discriminator value on the same base. The SDK actively constructs `ResourceManagementAssetReferenceDetails` in [entities/_assets/workspace_asset_reference.py](../azure/ai/ml/entities/_assets/workspace_asset_reference.py) on this exact API version, so both subtypes must survive the regen.
 
 The only mechanical fix on the spec side is to rename one of the two subtypes' discriminator values (e.g. `"Id"` → `"ResourceManagementId"` on `ResourceManagementAssetReference`). Because the discriminator value is part of the on-the-wire JSON body, this is a **wire-affecting change** — the service must accept the new value.
 
-> **Question for service team:** Is `ResourceManagementAssetReferenceDetails` a supported part of the `2021-10-01-dataplanepreview` contract that the service actually accepts on the wire? If yes, please rename its `referenceType` discriminator value upstream (e.g. to `"ResourceManagementId"`) and update the service to accept the new value — we will then regen and the SDK keeps working unchanged. If you confirm it was a back-port that no live service accepts, the SDK will remove the code that builds it (no service-side change needed).
+> **Question for service team:** Please rename one of the two `x-ms-discriminator-value: "Id"` claimants to a unique value (suggested: `"ResourceManagementId"` on `ResourceManagementAssetReference`, since `IdAssetReference` is the more widely-used / generic subtype) and update the service to accept the new on-the-wire value. If a different rename is preferred (different side, different new value, or a fully different disambiguation strategy), please confirm so we can mirror it on the SDK side and regen.
 
 Field-level schemas + the colliding discriminator excerpt: see [appendix](#issue-1-schemas).
 
@@ -54,14 +53,14 @@ A `DataImport` family has been overlaid onto the same parent — `DataImport`, `
 
 Two subtypes on the same discriminator base picking the same value → TSP rejects the model. Affected versions are those whose `mfe.json` carries both the `UriFolderDataVersion` definition and the `DataImport` overlay: `2023-04-01-preview`, `2023-06-01-preview`, `2024-04-01-preview`.
 
-The SDK actively imports types from the `DataImport` cluster on every blocked version:
+The SDK actively imports types from the `DataImport` cluster on every blocked version, so both branches of the discriminator must survive the regen:
 - `2023-04-01-preview`: [entities/_data_import/schedule.py:9](../azure/ai/ml/entities/_data_import/schedule.py#L9) imports `ImportDataAction`.
 - `2023-06-01-preview`: [entities/_data_import/data_import.py:9-11](../azure/ai/ml/entities/_data_import/data_import.py#L9-L11) imports `DataImport`, `DatabaseSource`, `FileSystemSource`.
 - `2024-04-01-preview`: same surface as above via the workspace-connection / OpenAI code paths.
 
 The mechanical fix on the spec side is to rename the `DataImport` family's discriminator value upstream so both branches survive (e.g. `"uri_folder"` → `"data_import"`). Like Issue 1, that is on-the-wire — the service must accept the new value.
 
-> **Question for service team:** Is the `DataImport` family (`DataImport`, `DataImportSource`, `DatabaseSource`, `FileSystemSource`, `ImportDataAction`) a supported part of `2023-04-01-preview` / `2023-06-01-preview` / `2024-04-01-preview` that the service actually accepts on the wire? If yes, please pick a unique `dataType` discriminator value for it (e.g. `"data_import"`) and update the service to read the new value. If you confirm no live service on these versions accepts the `DataImport` family, the SDK will drop its data-import code path on these versions and re-route consumers to a newer version that doesn't carry the back-port (no service-side change needed).
+> **Question for service team:** Please assign a unique `dataType` discriminator value to `DataImport` (suggested: `"data_import"`) on all three affected API versions and update the service to read the new on-the-wire value. If a different new value (or a fully different disambiguation strategy) is preferred, please confirm so we can mirror it on the SDK side and regen.
 
 Field-level schemas + the colliding discriminator excerpts: see [appendix](#issue-2-schemas).
 
@@ -171,13 +170,15 @@ Full TSP / swagger excerpts: see [appendix](#issue-3-evidence).
 
 The duplicate-operation errors are **not converter artefacts** — they reflect genuine swagger-design ambiguity where two sibling resource interfaces both claim the same `(path, verb)` pair. They will not go away by re-running the converter; the spec itself needs to disambiguate the routes. The paging errors are similar — `@pageItems` is a TypeSpec-side annotation that has to be added to the offending operations' return types.
 
-Mechanical fix options on the spec side (for the duplicate-operation cases): decorate one operation in each colliding pair with `@sharedRoute` (when both genuinely service the same endpoint and the implementation will multiplex on the request body), or restructure the offending interfaces so each `(path, verb)` pair is unique (the pattern Kashif's GA TSP uses). For the paging cases: annotate the return type with `@pageItems` on the appropriate array property.
+Mechanical fix options on the spec side (for the duplicate-operation cases): decorate both operations in each colliding pair with `@sharedRoute` (when both genuinely service the same endpoint and the implementation multiplexes on the request body — both TSP-side operations survive and both still emit into the client), or restructure the offending interfaces so each `(path, verb)` pair is unique by giving one side a distinct sub-route (the pattern Kashif's GA TSP uses — both operations survive on distinct wire paths). For the paging cases: annotate the return type with `@pageItems` on the appropriate array property.
+
+Note that both patterns preserve **both** colliding operations in the generated client — neither side disappears. Removing a TSP-side declaration would shrink the client surface vs. autorest and break the lossless-migration goal.
 
 The same disambiguation surface is tracked upstream in spec PR [#43779](https://github.com/Azure/azure-rest-api-specs/pull/43779).
 
-The SDK actively imports from `v2025-01-01-preview` — `CapabilityHost` (and related types from `_models_py3`) used by [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), and the **latest** `CommandJob` + `JobBase` used by [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_job/to_rest_functions.py](../azure/ai/ml/entities/_job/to_rest_functions.py). None of these consumers depend on the colliding endpoints / features / groups operations, so once `tsp compile` is unblocked, the regenerated client supplies what the SDK needs.
+The SDK actively imports from `v2025-01-01-preview` — `CapabilityHost` (and related types from `_models_py3`) used by [operations/_capability_hosts_operations.py](../azure/ai/ml/operations/_capability_hosts_operations.py), and the **latest** `CommandJob` + `JobBase` used by [entities/_builders/command.py](../azure/ai/ml/entities/_builders/command.py), [entities/_job/command_job.py](../azure/ai/ml/entities/_job/command_job.py), [entities/_job/to_rest_functions.py](../azure/ai/ml/entities/_job/to_rest_functions.py). None of these consumers depend on the colliding endpoints / features / groups operations directly, but the regenerated client must still export the full v2025-01 surface (the autorest-generated client does today) for downstream re-export to remain lossless.
 
-> **Question for service team:** For each of the 5 colliding `(path, verb)` pairs above, is the pair genuinely the same operation (in which case one side should be dropped, or `@sharedRoute` applied with the implementation multiplexing on the request body) or are they two different operations that should live on distinct sub-routes (the pattern Kashif's GA TSP uses)? And for the 2 paging operations, please confirm which array property on the return type is the paged item — we will then add the `@pageItems` annotation.
+> **Question for service team:** For each of the 5 colliding `(path, verb)` pairs above, please pick a disambiguation strategy that keeps **both** operations in the generated client: either (a) annotate both with `@sharedRoute` if they are genuinely the same wire endpoint multiplexed on the request body, or (b) restructure one side onto a distinct sub-route (the GA-TSP pattern). And for the 2 paging operations, please confirm which array property on the return type is the paged item — we will then add the `@pageItems` annotation.
 
 Full error log excerpt: see [appendix](#issue-4-evidence).
 
