@@ -2,7 +2,7 @@
 
 ## Context
 
-As part of migrating `azure-ai-ml` from autorest to TypeSpec, we generated TypeSpec for the existing ML preview API versions. For three of them, the SDK consumes types that the TypeSpec output does not produce — because those types are missing from the **upstream service spec** at `Azure/azure-rest-api-specs`. They exist only in the locally-modified copy of the swagger that lives in this SDK repo (`docs/swagger-local/`). When the TypeSpec compiles, it emits an OpenAPI matching the upstream spec, so these types disappear from the generated rest client and the SDK fails to build.
+Delta refers to difference between local swagger copy in azure-ai-ml vs upstream swagger spec in Azure/azure-rest-api-specs.
 
 For each delta we need one of two answers from the service team:
 
@@ -20,11 +20,6 @@ For each delta we need one of two answers from the service team:
 | `2024-04-01-preview` | `OpenAIEndpointDeploymentResourceProperties` | 1 | [entities/_autogen_entities/models/_patch.py](../azure/ai/ml/entities/_autogen_entities/models/_patch.py) |
 
 **Total: 8 types across 3 versions.** Full schema-by-schema definitions in the [appendix](#appendix--full-schemas).
-
-### Note on `2022-12-01-preview`
-
-This version is being deprecated and its single consumer ([entities/_compute/aml_compute.py](../azure/ai/ml/entities/_compute/aml_compute.py)) will be re-routed to `2022-10-01-preview`. The six types it imports — `AmlCompute`, `AmlComputeProperties`, `ComputeResource`, `ResourceId`, `ScaleSettings`, `UserAccountCredentials` — all exist in upstream `2022-10-01-preview`. **The redirect adds zero new types to the `2022-10` delta above.** No service team action is needed for `2022-12-01-preview`.
-
 ---
 
 ## Delta 1 — `2022-01-01-preview` workspace-connection auth credentials
