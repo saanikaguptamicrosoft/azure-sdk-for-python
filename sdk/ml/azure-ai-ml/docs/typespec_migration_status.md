@@ -18,6 +18,6 @@
 | 14 | 2024-10-01-preview | ⬜ Merged | https://github.com/Azure/azure-sdk-for-python/pull/47349 | TSP was present in main | https://github.com/Azure/azureml-examples/pull/3997 (refer [main](https://github.com/Azure/azureml-examples/pull/3995))|
 | 15 | 2025-01-01-preview | 🔴 Blocked | — | Found a way around TSP generation issues. TSP generated. ||
 
-**Note: **
-- Delta and PR validation issues should no longer matter if we can maintain the typespec in another branch referring: https://teams.microsoft.com/l/message/19:906c1efbbec54dc8949ac736633e6bdf@thread.skype/1781239436850?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&groupId=3e17dcb0-4257-4a30-b843-77f47f1d4121&parentMessageId=1781116135657&teamName=Azure%20SDK&channelName=TypeSpec%20Discussion&createdTime=1781239436850
+**Note:**
+- Delta and PR validation issues should no longer matter if we can maintain the typespec in another branch referring: [discussion](https://teams.microsoft.com/l/message/19:906c1efbbec54dc8949ac736633e6bdf@thread.skype/1781239436850?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&groupId=3e17dcb0-4257-4a30-b843-77f47f1d4121&parentMessageId=1781116135657&teamName=Azure%20SDK&channelName=TypeSpec%20Discussion&createdTime=1781239436850)
 - If above approach is approved, the TSP will be found in new branch: azure-ai-ml/legacy-api-versions/typespec here: https://github.com/Azure/azure-rest-api-specs/tree/azure-ai-ml/legacy-api-versions/typespec/specification/machinelearningservices/MachineLearningServices.V2025_01_01_Preview.Management
