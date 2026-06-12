@@ -1,44 +1,597 @@
-TypeSpec compiler v1.13.0
+TypeSpec compiler v1.12.0
 
 - Compiling...
-├ù Compiling
+ΓÜá Compiling
 Diagnostics were reported during compilation:
 
-[33mwarning[39m [90mcompiler-version-mismatch[39m: Current TypeSpec compiler conflicts with local version of @typespec/compiler referenced in C:/workspace/azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview. 
-If this warning occurs on the command line, try running `typespec` with a working directory of C:/workspace/azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview. 
-If this warning occurs in the IDE, try configuring the `tsp-server` path to C:/workspace/azure-rest-api-specs/node_modules/@typespec/compiler.
-  Expected: C:/Users/saanikagupta/AppData/Local/npm-cache/_npx/fb41b4d925aabf51/node_modules/@typespec/compiler
-  Resolved: C:/workspace/azure-rest-api-specs/node_modules/@typespec/compiler
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Workspace.tsp[39m:[33m135[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
-> 135 |   list is ArmResourceActionSync<
-      |   ^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Feature.tsp[39m:[33m37[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/features".
-> 37 |   list is ArmResourceListByParent<
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m104[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-post-operation-response-codes[39m: Long-running post operations must have 202 and default responses. They must also have a 200 response if the final response has a schema. They must not have any other responses.
+> 104 |   deleteBulk is ArmResourceActionAsync<
+      |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5568[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 5568 |   vCPUs?: int32;
+       |   ^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5580[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 5580 |   osVhdSizeMB?: int32;
+       |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5586[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 5586 |   maxResourceVolumeMB?: int32;
+       |   ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5592[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 5592 |   memoryGB?: float64;
+       |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5604[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 5604 |   premiumIO?: boolean;
+       |   ^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5609[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 5609 |   estimatedVMPrices?: EstimatedVMPrices;
+       |   ^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/ComputeResource.tsp[39m:[33m20[39m:[33m6[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-legacy-usage[39m: Referencing elements inside Legacy namespace "Azure.ResourceManager.Legacy" is not allowed.
+> 20 |   is Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<{}> {
+     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/ComputeResource.tsp[39m:[33m20[39m:[33m71[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-provisioning-state[39m: The RP-specific property model in the 'properties' property of this resource must contain a 'provisioningState property.  The property type should be an enum or a union of string values, and it must specify known state values 'Succeeded', 'Failed', and 'Canceled'.
+> 20 |   is Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<{}> {
+     |                                                                       ^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m5881[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/patch-envelope[39m: The Resource PATCH request for resource 'ComputeResource' is missing envelope properties:  [identity, sku, tags]. Since these properties are supported in the resource, they must also be updatable via PATCH.
+> 5881 | model ClusterUpdateParameters {
+       |       ^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/ComputeResource.tsp[39m:[33m20[39m:[33m71[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/no-empty-model[39m: Properties with type:object must have definition of a reference model.
+> 20 |   is Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<{}> {
+     |                                                                       ^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9424[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 9424 |   allowRoleAssignmentOnRG?: boolean;
+       |   ^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9454[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 9454 |   enableServiceSideCMKEncryption?: boolean;
+       |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9808[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 9808 |   ipRules?: IPRule[];
+       |   ^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/PrivateEndpointConnection.tsp[39m:[33m19[39m:[33m6[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-legacy-usage[39m: Referencing elements inside Legacy namespace "Azure.ResourceManager.Legacy" is not allowed.
+> 19 |   is Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<PrivateEndpointConnectionProperties> {
+     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9864[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-provisioning-state[39m: The provisioningState property must have a single read visibility.
+> 9864 |   provisioningState?: PrivateEndpointConnectionProvisioningState;
+       |   ^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9914[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 9914 |   serverlessComputeNoPublicIP?: boolean;
+       |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Workspace.tsp[39m:[33m29[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/documentation-required[39m: The ModelProperty named 'kind' should have a documentation or description, use doc comment /** */ to provide it.
+> 29 |   kind?: string;
      |   ^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m40[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "get" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
-> 40 |   get is ArmResourceRead<InferenceEndpoint>;
-     |   ^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m33[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "get" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
-> 33 |   get is ArmResourceRead<EndpointResourcePropertiesBasicResource>;
-     |   ^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m45[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "createOrUpdate" routed at "put /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
-> 45 |   createOrUpdate is ArmResourceCreateOrReplaceAsync<InferenceEndpoint>;
-     |   ^^^^^^^^^^^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m41[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "createOrUpdate" routed at "put /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints/{endpointName}".
-> 41 |   createOrUpdate is ArmResourceCreateOrReplaceAsync<
-     |   ^^^^^^^^^^^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceEndpoint.tsp[39m:[33m68[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints".
-> 68 |   list is ArmResourceListByParent<
-     |   ^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m55[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "list" routed at "get /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/endpoints".
-> 55 |   list is ArmResourceListByParent<
-     |   ^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m111[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "getDeltaModelsStatusAsync" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
-> 111 |   getDeltaModelsStatusAsync is ArmResourceActionSync<
-      |   ^^^^^^^^^^^^^^^^^^^^^^^^^
-[36msdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/InferenceGroup.tsp[39m:[33m142[39m:[33m3[39m - [31merror[39m [90m@typespec/http/duplicate-operation[39m: Duplicate operation "getStatus" routed at "post /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/groups/{groupName}/getStatus".
-> 142 |   getStatus is ArmResourceActionSync<
-      |   ^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Workspace.tsp[39m:[33m17[39m:[33m6[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-legacy-usage[39m: Referencing elements inside Legacy namespace "Azure.ResourceManager.Legacy" is not allowed.
+> 17 |   is Azure.ResourceManager.Legacy.TrackedResourceWithOptionalLocation<
+     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 18 |     WorkspaceProperties,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^
+> 19 |     false
+     | ^^^^^^^^^^^^^^^^^^^^^^^^
+> 20 |   > {
+     | ^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6288[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 6288 |   targetVMSize?: string;
+       |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6333[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 6333 |   usageDetails?: PTUDeploymentUsage[];
+       |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6337[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 6337 | model PTUDeploymentUsage {
+       |       ^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9105[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'publicNetworkAccess' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 9105 |   publicNetworkAccess?: string;
+       |   ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6555[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 6555 |   componentSpec?: unknown;
+       |   ^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6613[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 6613 | model GetBlobReferenceSASRequestDto {
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6628[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 6628 | model GetBlobReferenceSASResponseDto {
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7152[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'primaryKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 7152 |   primaryKey?: string;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7158[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'secondaryKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 7158 |   secondaryKey?: string;
+       |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7129[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7129 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7165[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/patch-envelope[39m: The Resource PATCH request for resource 'BatchEndpoint' is missing envelope properties:  [sku]. Since these properties are supported in the resource, they must also be updatable via PATCH.
+> 7165 | model PartialMinimalTrackedResourceWithIdentity
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7305[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/no-empty-model[39m: Properties with type:object must have definition of a reference model.
+> 7305 | model DeploymentResourceConfiguration extends ResourceConfiguration {}
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7373[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7373 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7398[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/patch-envelope[39m: The Resource PATCH request for resource 'BatchDeployment' is missing envelope properties:  [identity, sku]. Since these properties are supported in the resource, they must also be updatable via PATCH.
+> 7398 | model PartialBatchDeploymentPartialMinimalTrackedResourceWithProperties {
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7982[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 7982 |   properties?: StringStringKeyValuePair[];
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7982[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7982 |   properties?: StringStringKeyValuePair[];
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7982[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7982 |   properties?: StringStringKeyValuePair[];
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m8147[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 8147 |   environmentVariables?: StringStringKeyValuePair[];
+       |   ^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7982[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7982 |   properties?: StringStringKeyValuePair[];
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m8209[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/patch-envelope[39m: The Resource PATCH request for resource 'InferenceGroup' is missing envelope properties:  [identity]. Since these properties are supported in the resource, they must also be updatable via PATCH.
+> 8209 | model PartialMinimalTrackedResourceWithSku
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m8273[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 8273 |   sampleInstanceID?: string;
+       |   ^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7129[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7129 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7165[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/patch-envelope[39m: The Resource PATCH request for resource 'OnlineEndpoint' is missing envelope properties:  [sku]. Since these properties are supported in the resource, they must also be updatable via PATCH.
+> 7165 | model PartialMinimalTrackedResourceWithIdentity
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m7373[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 7373 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m8209[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/patch-envelope[39m: The Resource PATCH request for resource 'OnlineDeployment' is missing envelope properties:  [identity]. Since these properties are supported in the resource, they must also be updatable via PATCH.
+> 8209 | model PartialMinimalTrackedResourceWithSku
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m8907[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'accessToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 8907 |   accessToken?: string;
+       |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9349[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/no-empty-model[39m: Properties with type:object must have definition of a reference model.
+> 9349 | model RegistryPartialManagedServiceIdentity
+       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10008[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 10008 |   allowRoleAssignmentOnRG?: boolean;
+        |   ^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10205[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-string-discriminator[39m: Use an extensible union instead of a plain string (ex: `union PetKind { cat: "cat", dog: "dog", string };`)
+> 10205 |   type: string;
+        |   ^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10205[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "type" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 10205 |   type: string;
+        |   ^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10309[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 10309 |   rateLimits?: EndpointModelSkuRateLimitProperties[];
+        |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10345[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 10345 |   rules?: EndpointModelSkuRateLimitRuleProperties[];
+        |   ^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10359[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'key' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10359 |   key?: string;
+        |   ^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10361[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 10361 |   matchPatterns?: EndpointModelSkuRateLimitRulePatternProperties[];
+        |   ^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10441[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 10441 |   completionBlocklists?: RaiBlocklistConfig[];
+        |   ^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10451[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/missing-x-ms-identifiers[39m: Missing identifying properties of objects in the array item, please add @identifiers(#["<prop>"]) to specify it. If there are no appropriate identifying properties, please add @identifiers(#[]).
+> 10451 |   promptBlocklists?: RaiBlocklistConfig[];
+        |   ^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10456[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "type" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 10456 |   type?: RaiPolicyType;
+        |   ^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10686[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "name" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 10686 |   name?: string;
+        |   ^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointResourcePropertiesBasicResource.tsp[39m:[33m27[39m:[33m11[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/no-resource-delete-operation[39m: Resource 'EndpointResourcePropertiesBasicResource' must have a delete operation.
+> 27 | interface EndpointResourcePropertiesBasicResources {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10728[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'appInsightsInstrumentationKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10728 |   appInsightsInstrumentationKey?: string;
+        |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10784[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'primaryAccessKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10784 |   primaryAccessKey?: string;
+        |   ^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10790[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'secondaryAccessKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10790 |   secondaryAccessKey?: string;
+        |   ^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10745[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'userStorageKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10745 |   userStorageKey?: string;
+        |   ^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10797[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'accessToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10797 |   accessToken?: string;
+        |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10817[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'refreshToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10817 |   refreshToken?: string;
+        |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10834[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'userStorageKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 10834 |   userStorageKey?: string;
+        |   ^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10982[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 10982 | model AKSSchema {
+        |       ^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10992[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 10992 | model AKSSchemaProperties {
+        |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m11118[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 11118 |   dnsServiceIP?: string;
+        |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m10972[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 10972 | model AKS extends Compute {
+        |       ^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m11323[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 11323 |   propertyBag?: unknown;
+        |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m11500[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 11500 |   enableOSPatching?: boolean;
+        |   ^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m11510[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 11510 |   enableSSO?: boolean = true;
+        |   ^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12040[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 12040 |   diskSizeGB?: int32;
+        |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12148[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'password' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 12148 |   password?: string;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12164[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12164 | model HDInsightProperties {
+        |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12194[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12194 | model HDInsightSchema {
+        |       ^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12184[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12184 | model HDInsight extends Compute {
+        |       ^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12419[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'databricksAccessToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 12419 |   databricksAccessToken?: string;
+        |   ^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12457[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'key' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 12457 |   key?: string;
+        |   ^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12601[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12601 | model AutoMLJob extends JobBaseProperties {
+        |       ^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12701[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12701 | model AutoMLVertical {
+        |       ^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12726[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12726 | model MLTableJobInput extends JobInput {
+        |       ^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12767[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12767 | model NCrossValidations {
+        |       ^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m12756[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 12756 | model AutoNCrossValidations extends NCrossValidations {
+        |       ^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m13569[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 13569 |   parameters?: unknown;
+        |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m13453[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 13453 |   stackMetaLearnerKWargs?: unknown;
+        |   ^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m13453[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 13453 |   stackMetaLearnerKWargs?: unknown;
+        |   ^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m13685[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 13685 |   parameters?: unknown;
+        |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14055[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 14055 | model CustomNCrossValidations extends NCrossValidations {
+        |       ^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14376[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'password' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 14376 |   password?: string;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14396[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 14396 |   endpointInvocationDefinition: unknown;
+        |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14885[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 14885 | model MLFlowModelJobInput extends JobInput {
+        |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14851[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 14851 |   stepLRGamma?: float32;
+        |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14856[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 14856 |   stepLRStepSize?: int32;
+        |   ^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14871[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 14871 |   warmupCosineLRCycles?: float32;
+        |   ^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m14876[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 14876 |   warmupCosineLRWarmupEpochs?: int32;
+        |   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15067[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 15067 |   stepLRGamma?: string;
+        |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15072[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 15072 |   stepLRStepSize?: string;
+        |   ^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15087[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 15087 |   warmupCosineLRCycles?: string;
+        |   ^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15092[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 15092 |   warmupCosineLRWarmupEpochs?: string;
+        |   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15515[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 15515 | model MLFlowModelJobOutput extends JobOutput {
+        |       ^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15527[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 15527 | model MLTableData extends DataVersionBaseProperties {
+        |       ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15541[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 15541 | model MLTableJobOutput extends JobOutput {
+        |       ^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15723[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/no-empty-model[39m: Properties with type:object must have definition of a reference model.
+> 15723 | model NlpVerticalFeaturizationSettings extends FeaturizationSettings {}
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m15900[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 15900 |   settings?: unknown;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16052[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 16052 | model SASCredential extends DataReferenceCredential {
+        |       ^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16065[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 16065 | model SASCredentialDto extends PendingUploadCredentialDto {
+        |       ^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16100[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'sasToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 16100 |   sasToken?: string;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16155[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'clientSecret' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 16155 |   clientSecret?: string;
+        |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16398[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 16398 |   searchSpace: unknown;
+        |   ^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16591[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 16591 | model TopNFeaturesByAttribution extends MonitoringFeatureFilterBase {
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16712[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 16712 | model AADAuthTypeWorkspaceConnectionProperties
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16737[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'secretAccessKey' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 16737 |   secretAccessKey?: string;
+        |   ^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16761[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'key' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 16761 |   key?: string;
+        |   ^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m16804[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'key' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 16804 |   key?: string;
+        |   ^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17056[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 17056 | model OAuth2AuthTypeWorkspaceConnectionProperties
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17074[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 17074 | model WorkspaceConnectionOAuth2 {
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17088[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'clientSecret' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17088 |   clientSecret?: string;
+        |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17093[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'developerToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17093 |   developerToken?: string;
+        |   ^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17096[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'password' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17096 |   password?: string;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17102[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'refreshToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17102 |   refreshToken?: string;
+        |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17117[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 17117 | model OpenAIEndpointDeploymentResourceProperties
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17128[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 17128 | model OpenAIEndpointResourceProperties extends EndpointResourceProperties {
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17136[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 17136 | model PATAuthTypeWorkspaceConnectionProperties
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17190[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Model types must use PascalCase
+> 17190 | model SASAuthTypeWorkspaceConnectionProperties
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17240[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/no-unknown[39m: Azure services must not have properties of type `unknown`.
+> 17240 |   metadata?: unknown;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17297[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'clientSecret' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17297 |   clientSecret?: string;
+        |   ^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17373[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'password' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17373 |   password?: string;
+        |   ^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m17378[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/secret-prop[39m: Property 'securityToken' looks like it contains sensitive information. Consider marking it with @secret decorator to ensure it is handled securely.
+> 17378 |   securityToken?: string;
+        |   ^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m6414[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "properties" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 6414 |   properties?: Record<string>;
+       |   ^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/models.tsp[39m:[33m9782[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-duplicate-property[39m: Duplicate property "type" found in the resource envelope and resource properties.  Please do not duplicate envelope properties in resource properties.
+> 9782 |   type: RuleType;
+       |   ^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/ComputeResource.tsp[39m:[33m57[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-resource-manager/arm-resource-patch[39m: Resource PATCH must contain the 'tags' property.
+> 57 |   update is ArmCustomPatchAsync<
+     |   ^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m181[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 181 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m181[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 181 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/Registry.tsp[39m:[33m88[39m:[33m3[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Operation types must use camelCase
+> 88 |   getBlobReferenceSAS is ArmResourceActionSync<
+     |   ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/WorkspaceConnectionPropertiesV2BasicResource.tsp[39m:[33m140[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 140 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/WorkspaceConnectionPropertiesV2BasicResource.tsp[39m:[33m140[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 140 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m99[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 99 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m99[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 99 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m115[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 115 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/EndpointDeploymentResourcePropertiesBasicResource.tsp[39m:[33m115[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 115 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m65[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 65 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m65[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 65 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m65[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 65 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistPropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m47[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 47 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m65[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 65 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m65[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 65 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m65[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 65 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiBlocklistItemPropertiesBasicResource.tsp[39m:[33m81[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 81 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m80[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 80 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m80[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 80 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m98[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 98 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m98[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 98 |       `proxy-api-version`?: string;
+     |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m114[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 114 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m114[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 114 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m167[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 167 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m167[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 167 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m183[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 183 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m183[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 183 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m199[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 199 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/RaiPolicyPropertiesBasicResource.tsp[39m:[33m199[39m:[33m7[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Property types must use camelCase
+> 199 |       `proxy-api-version`?: string;
+      |       ^^^^^^^^^^^^^^^^^^^
+[36m../azure-sdk-for-python/sdk/ml/azure-ai-ml/docs/generated-tsp/MachineLearningServices.Management.v2025_01_01_preview/routes.tsp[39m:[33m81[39m:[33m11[39m - [33mwarning[39m [90m@azure-tools/typespec-azure-core/casing-style[39m: The names of Interface types must use PascalCase
+> 81 | interface PTUQuotaOperationGroup {
+     |           ^^^^^^^^^^^^^^^^^^^^^^
 
-Found 10 errors, 1 warning.
+Found 194 warnings.
 

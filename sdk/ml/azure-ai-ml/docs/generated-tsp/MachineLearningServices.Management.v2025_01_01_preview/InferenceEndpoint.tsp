@@ -37,11 +37,13 @@ interface InferenceEndpoints {
   /**
    * Get InferenceEndpoint.
    */
+  @sharedRoute
   get is ArmResourceRead<InferenceEndpoint>;
 
   /**
    * Create or update InferenceEndpoint (asynchronous).
    */
+  @sharedRoute
   createOrUpdate is ArmResourceCreateOrReplaceAsync<InferenceEndpoint>;
 
   /**
@@ -65,6 +67,7 @@ interface InferenceEndpoints {
   /**
    * List Inference Endpoints.
    */
+  @sharedRoute
   list is ArmResourceListByParent<
     InferenceEndpoint,
     Parameters = {

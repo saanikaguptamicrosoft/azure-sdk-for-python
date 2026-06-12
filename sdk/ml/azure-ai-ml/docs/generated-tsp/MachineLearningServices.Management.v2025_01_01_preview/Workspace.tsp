@@ -129,6 +129,7 @@ interface Workspaces {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("WorkspaceFeatures_List")
+  @sharedRoute
   @list
   @get
   @action("features")

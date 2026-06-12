@@ -8301,15 +8301,16 @@ model DeltaModelListRequest {
  */
 model StringArmPaginatedResult {
   /**
-   * The link to the next page of String objects. If null, there are no additional pages.
-   */
-  nextLink?: string;
-
-  /**
-   * An array of objects of type String.
+   * The String items on this page.
    */
   @pageItems
   value?: string[];
+
+  /**
+   * The link to the next page of items.
+   */
+  @nextLink
+  nextLink?: string;
 }
 
 /**

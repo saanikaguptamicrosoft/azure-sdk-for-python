@@ -107,6 +107,7 @@ interface InferenceGroups {
   /**
    * Retrieve status of delta models associated with the InferenceGroup and the target base model.
    */
+  @sharedRoute
   @action("getStatus")
   getDeltaModelsStatusAsync is ArmResourceActionSync<
     InferenceGroup,
@@ -139,6 +140,7 @@ interface InferenceGroups {
   /**
    * Retrieve inference group status.
    */
+  @sharedRoute
   getStatus is ArmResourceActionSync<
     InferenceGroup,
     void,

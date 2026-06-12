@@ -30,6 +30,7 @@ interface EndpointResourcePropertiesBasicResources {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("Endpoint_Get")
+  @sharedRoute
   get is ArmResourceRead<EndpointResourcePropertiesBasicResource>;
 
   /**
@@ -38,6 +39,7 @@ interface EndpointResourcePropertiesBasicResources {
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   #suppress "@azure-tools/typespec-azure-resource-manager/arm-put-operation-response-codes" "For backward compatibility"
   @operationId("Endpoint_CreateOrUpdate")
+  @sharedRoute
   createOrUpdate is ArmResourceCreateOrReplaceAsync<
     EndpointResourcePropertiesBasicResource,
     Response =
@@ -52,6 +54,7 @@ interface EndpointResourcePropertiesBasicResources {
    */
   #suppress "@azure-tools/typespec-azure-core/no-openapi" "non-standard operations"
   @operationId("Endpoint_List")
+  @sharedRoute
   list is ArmResourceListByParent<
     EndpointResourcePropertiesBasicResource,
     Parameters = {

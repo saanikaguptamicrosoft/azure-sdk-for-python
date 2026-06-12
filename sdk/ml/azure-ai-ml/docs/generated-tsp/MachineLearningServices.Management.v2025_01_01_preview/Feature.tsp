@@ -34,6 +34,7 @@ interface Features {
   /**
    * List Features.
    */
+  @sharedRoute
   list is ArmResourceListByParent<
     Feature,
     Parameters = {
