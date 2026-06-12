@@ -1,20 +1,75 @@
-# TypeSpec issue to service mapping
+# TypeSpec migration — service-centric issue mapping
 
-## Delta issues
+## Context
 
-| Kind | # | API version(s) | Schemas / fields involved | Service area (best guess) | Owner |
-|---|---:|---|---|---|---|
-| Delta | 1 | 2022-01-01-preview | `Credentials`, `ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword` | Workspace Connections / Credentials (models) | TBD |
-| Delta | 2 | 2022-10-01-preview | `UserCreatedAcrAccount`, `UserCreatedStorageAccount`, `AcrDetails.userCreatedAcrAccount`, `StorageAccountDetails.userCreatedStorageAccount` | Registry (BYO ACR / Storage) | TBD |
-| Delta | 3 | 2022-10-01-preview | `Registry.managedResourceGroupTags` | Registry | TBD |
-| Delta | 4 | 2024-04-01-preview | `OpenAIEndpointDeploymentResourceProperties` | Workspace Endpoints / Deployments (MAAP/OpenAI) | TBD |
-| Delta | 5 | 2024-04-01-preview | `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` (`WorkspaceConnectionSharedAccessSignature` vs `WorkspaceConnectionAccountKey`) | Workspace Connections / Credentials | TBD |
+This document inverts the per-issue view in [typespec_deltas_service_review.md](./typespec_deltas_service_review.md) (Deltas 1–5) and [typespec_generation_issues_service_review.md](./typespec_generation_issues_service_review.md) (TSG 1–4) into a per-service view. A single Delta or TSG can affect multiple service owners (e.g. TSG 4 on `2025-01-01-preview` covers Workspace Features, Workspace Endpoints, and Inference Groups in one compile-errors log), so each row below is **one decision** for **one service team**. Where a single Delta/TSG produces decisions for multiple services, it is split across multiple rows.
 
-## TSP generation issues
+## Service teams to engage
 
-| Kind | # | API version(s) | Schemas / routes involved | Service area (best guess) | Owner |
-|---|---:|---|---|---|---|
-| TSG | 1 | 2021-10-01-dataplanepreview | `AssetReferenceBase.referenceType` collision: `IdAssetReference` vs `ResourceManagementAssetReferenceDetails` | Workspace Assets / Asset Reference models (MFE dataplane) | TBD |
-| TSG | 2 | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview | `DataVersionBaseProperties.dataType` collision: `UriFolderDataVersion` vs `DataImport`; companion: `DataImportSource`, `DatabaseSource`, `FileSystemSource`, `ImportDataAction` | Data Import / Data Assets models | TBD |
-| TSG | 3 | 2023-08-01-preview, 2024-01-01-preview | `ComputeResource` converter `FIXME` / empty body; orphaned compute family (`ComputeInstance*`, `AssignedUser`, `ComputeInstanceDataMount`, etc.) | Compute | TBD |
-| TSG | 4 | 2025-01-01-preview | Duplicate operations on workspace endpoints: `/workspaces/{ws}/features`, `/workspaces/{ws}/endpoints/{endpointName}`, `/workspaces/{ws}/endpoints`, `/workspaces/{ws}/groups/{groupName}/getStatus` | Workspace Features + Endpoints + Inference Groups | TBD |
+| Service area | Decisions | Affected API versions | Issue kinds |
+|---|---:|---|---|
+| [Compute](#compute) | 1 | 2023-08-01-preview, 2024-01-01-preview | TSG |
+| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | 4 | 2024-04-01-preview, 2025-01-01-preview | Delta + TSG |
+| [Inference Groups](#inference-groups) | 1 | 2025-01-01-preview | TSG |
+| [Workspace Features](#workspace-features) | 1 | 2025-01-01-preview | TSG |
+| [Workspace Connections / Credentials](#workspace-connections--credentials) | 2 | 2022-01-01-preview, 2024-04-01-preview | Delta |
+| [Registry](#registry) | 2 | 2022-10-01-preview | Delta |
+| [Workspace Assets / Asset Reference (MFE dataplane)](#workspace-assets--asset-reference-mfe-dataplane) | 1 | 2021-10-01-dataplanepreview | TSG |
+| [Data Import / Data Assets](#data-import--data-assets) | 1 | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview | TSG |
+
+**13 service-team decisions across 8 service areas.**
+
+## Per-service detail
+
+### Compute
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [TSG 3](./typespec_generation_issues_service_review.md#issue-3--converter-emits-empty--body-on-computeresourcetsp-orphan-pruning-the-compute-hierarchy) | 2023-08-01-preview, 2024-01-01-preview | `ComputeResource` converter `FIXME` / empty `<{}>` body → `Compute` discriminated union + ~25 subtype models pruned (`ComputeInstance*`, `AssignedUser`, `PersonalComputeInstanceSettings`, `ComputeInstanceDataMount`, etc.) | Per version: confirm ARM envelope template (`TrackedResourceWithOptionalLocation<ComputeResourceSchema>` vs `ProxyResource<Compute>` vs other), whether `location` / `tags` / `sku` live on the envelope, and which identity mixin applies | TBD |
+
+### Workspace Endpoints / Deployments
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [Delta 4](./typespec_deltas_service_review.md#delta-4--2024-04-01-preview-azure-openai-endpoint-deployment) | 2024-04-01-preview | `OpenAIEndpointDeploymentResourceProperties` (discriminator subtype `"Azure.OpenAI"` of `EndpointDeploymentResourceProperties`) entirely missing upstream | Re-add the empty-body subtype (matches `2024-01` / `2024-07`) or confirm intentional removal and tell us what to use instead | TBD |
+| [TSG 4 (#2)](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) | 2025-01-01-preview | `GET /workspaces/{ws}/endpoints/{endpointName}` — `InferenceEndpoint.get` vs `EndpointResourcePropertiesBasicResource.get` | Disambiguate (`@sharedRoute` if same wire endpoint multiplexed on body, or restructure one onto a distinct sub-route) — both must survive in generated client | TBD |
+| [TSG 4 (#3)](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) | 2025-01-01-preview | `PUT /workspaces/{ws}/endpoints/{endpointName}` — `InferenceEndpoint.createOrUpdate` vs `EndpointResourcePropertiesBasicResource.createOrUpdate` | Same as above | TBD |
+| [TSG 4 (#4)](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) | 2025-01-01-preview | `GET /workspaces/{ws}/endpoints` — `InferenceEndpoint.list` vs `EndpointResourcePropertiesBasicResource.list` | Same as above | TBD |
+
+### Inference Groups
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [TSG 4 (#5)](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) | 2025-01-01-preview | `POST /workspaces/{ws}/groups/{groupName}/getStatus` — `InferenceGroup.getStatus` vs `InferenceGroup.getDeltaModelsStatusAsync` | Disambiguate (`@sharedRoute` or distinct sub-route); both must survive | TBD |
+
+### Workspace Features
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [TSG 4 (#1)](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) | 2025-01-01-preview | `GET /workspaces/{ws}/features` — `Workspace.list` (Workspace.tsp:135) vs `Feature.list` (Feature.tsp:37) | Disambiguate (`@sharedRoute` or distinct sub-route); both must survive | TBD |
+
+### Workspace Connections / Credentials
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [Delta 1](./typespec_deltas_service_review.md#delta-1--2022-01-01-preview-workspace-connection-auth-credentials) | 2022-01-01-preview | `Credentials` base + 5 subtypes (`ManagedIdentity`, `PersonalAccessToken`, `ServicePrincipal`, `SharedAccessSignature`, `UsernamePassword`) entirely missing upstream | Add to upstream swagger, or confirm the SDK should drop this code path | TBD |
+| [Delta 5](./typespec_deltas_service_review.md#delta-5--2024-04-01-preview-accountkeyauthtypeworkspaceconnectionpropertiescredentials-shape-disagreement) | 2024-04-01-preview | `AccountKeyAuthTypeWorkspaceConnectionProperties.credentials` shape disagreement — local: `WorkspaceConnectionSharedAccessSignature{sas}`, upstream: `WorkspaceConnectionAccountKey{key}` | Confirm on-the-wire field name (`sas` or `key`) and align spec to the truth | TBD |
+
+### Registry
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [Delta 2](./typespec_deltas_service_review.md#delta-2--2022-10-01-preview-registry-user-supplied-storage--acr) | 2022-10-01-preview | `UserCreatedAcrAccount`, `UserCreatedStorageAccount` types + parent fields `AcrDetails.userCreatedAcrAccount`, `StorageAccountDetails.userCreatedStorageAccount` entirely missing upstream | Add 2 types + 2 parent properties, or confirm the BYO ACR / Storage path should be removed from SDK on this version | TBD |
+| [Delta 3](./typespec_deltas_service_review.md#delta-3--2022-10-01-preview-registrymanagedresourcegrouptags) | 2022-10-01-preview | `Registry.managedResourceGroupTags` field present locally and actively written by SDK, missing upstream | Add to upstream `Registry` / `RegistryProperties`, or confirm the SDK should stop forwarding user tags to the managed resource group | TBD |
+
+### Workspace Assets / Asset Reference (MFE dataplane)
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [TSG 1](./typespec_generation_issues_service_review.md#issue-1--2021-10-01-dataplanepreview-assetreferencebasereferencetype-discriminator-collision) | 2021-10-01-dataplanepreview | `AssetReferenceBase.referenceType` discriminator collision — value `"Id"` shared by `IdAssetReference` and `ResourceManagementAssetReference` (`x-ms-client-name: ResourceManagementAssetReferenceDetails`) | Rename one side's discriminator value (suggested: `"ResourceManagementId"` on `ResourceManagementAssetReference`) and update the service to accept the new on-the-wire value | TBD |
+
+### Data Import / Data Assets
+
+| Source | API versions | Schema / field / route | Ask of service | Owner |
+|---|---|---|---|---|
+| [TSG 2](./typespec_generation_issues_service_review.md#issue-2--2023-04-01-preview--2023-06-01-preview--2024-04-01-preview-dataversionbasepropertiesdatatype-discriminator-collision) | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview | `DataVersionBaseProperties.dataType` discriminator collision — value `"uri_folder"` shared by `UriFolderDataVersion` and `DataImport`; companion types `DataImportSource`, `DatabaseSource`, `FileSystemSource`, `ImportDataAction` blocked by the same collision | Rename `DataImport`'s discriminator value (suggested: `"data_import"`) across all 3 versions and update the service to accept the new on-the-wire value | TBD |
