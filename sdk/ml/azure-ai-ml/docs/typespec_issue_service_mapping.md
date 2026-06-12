@@ -4,20 +4,32 @@
 
 This document inverts the per-issue view in [typespec_deltas_service_review.md](./typespec_deltas_service_review.md) (Deltas 1–5) and [typespec_generation_issues_service_review.md](./typespec_generation_issues_service_review.md) (TSP 1–4) into a per-service view. A single Delta or TSP can affect multiple service owners (e.g. TSP 4 on `2025-01-01-preview` covers Workspace Features, Workspace Endpoints, and Inference Groups in one compile-errors log), so each row below is **one decision** for **one service team**. Where a single Delta/TSP produces decisions for multiple services, it is split across multiple rows.
 
-## Service teams to engage
+## Service teams to engage — TSP issues
 
-| Service area | Decisions | Affected API versions | Issue kinds |
-|---|---:|---|---|
-| [Compute](#compute) | 1 | 2023-08-01-preview, 2024-01-01-preview | TSP |
-| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | 4 | 2024-04-01-preview, 2025-01-01-preview | Delta + TSP |
-| [Inference Groups](#inference-groups) | 1 | 2025-01-01-preview | TSP |
-| [Workspace Features](#workspace-features) | 1 | 2025-01-01-preview | TSP |
-| [Workspace Connections / Credentials](#workspace-connections--credentials) | 2 | 2022-01-01-preview, 2024-04-01-preview | Delta |
-| [Registry](#registry) | 2 | 2022-10-01-preview | Delta |
-| [Workspace Assets / Asset Reference (MFE dataplane)](#workspace-assets--asset-reference-mfe-dataplane) | 1 | 2021-10-01-dataplanepreview | TSP |
-| [Data Import / Data Assets](#data-import--data-assets) | 1 | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview | TSP |
+These are the decisions that **require service-team input** to unblock the TypeSpec migration (compile failures or generator defects that drop SDK-visible types). See [typespec_generation_issues_service_review.md](./typespec_generation_issues_service_review.md) for full evidence.
 
-**13 service-team decisions across 8 service areas.**
+| Service area | Decisions | Affected API versions |
+|---|---:|---|
+| [Compute](#compute) | 1 | 2023-08-01-preview, 2024-01-01-preview |
+| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | 3 | 2025-01-01-preview |
+| [Inference Groups](#inference-groups) | 1 | 2025-01-01-preview |
+| [Workspace Features](#workspace-features) | 1 | 2025-01-01-preview |
+| [Workspace Assets / Asset Reference (MFE dataplane)](#workspace-assets--asset-reference-mfe-dataplane) | 1 | 2021-10-01-dataplanepreview |
+| [Data Import / Data Assets](#data-import--data-assets) | 1 | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview |
+
+**7 TSP-blocking decisions across 6 service areas.**
+
+## Deltas — service mapping (reference only)
+
+The deltas below are spec-vs-local-swagger drift the SDK currently relies on. They do **not** block the TypeSpec migration on their own — for each one, the SDK can absorb the regen by adjusting the entity layer (the local back-port is the workaround). Listed here for completeness; the migration does not need to wait on the service team to resolve them. See [typespec_deltas_service_review.md](./typespec_deltas_service_review.md) for full evidence.
+
+| Service area | Items | Affected API versions |
+|---|---:|---|
+| [Workspace Connections / Credentials](#workspace-connections--credentials) | 2 | 2022-01-01-preview, 2024-04-01-preview |
+| [Registry](#registry) | 2 | 2022-10-01-preview |
+| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | 1 | 2024-04-01-preview |
+
+**5 deltas across 3 service areas.**
 
 ## Per-service detail
 
