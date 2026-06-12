@@ -10,7 +10,7 @@ These are the decisions that **require service-team input** to unblock the TypeS
 
 | Service area | TSPs | Affected API versions | Ticket to Service team |
 |---|---|---|---|
-| [Compute](#compute) | [TSP 3](./typespec_generation_issues_service_review.md#issue-3--converter-emits-empty--body-on-computeresourcetsp-orphan-pruning-the-compute-hierarchy) | 2023-08-01-preview, 2024-01-01-preview | https://portal.microsofticm.com/imp/v5/incidents/details/816303994/summary |
+| [Compute](#compute) | [TSP 3](./typespec_generation_issues_service_review.md#issue-3--converter-emits-empty--body-on-computeresourcetsp-orphan-pruning-the-compute-hierarchy) | 2023-08-01-preview, 2024-01-01-preview | [816303994](https://portal.microsofticm.com/imp/v5/incidents/details/816303994/summary) |
 | [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#2, #3, #4) | 2025-01-01-preview | |
 | [Inference Groups](#inference-groups) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#5) | 2025-01-01-preview | |
 | [Workspace Features](#workspace-features) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#1) | 2025-01-01-preview | |
