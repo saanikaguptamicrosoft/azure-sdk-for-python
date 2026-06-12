@@ -8,14 +8,14 @@ This document inverts the per-issue view in [typespec_deltas_service_review.md](
 
 These are the decisions that **require service-team input** to unblock the TypeSpec migration (compile failures or generator defects that drop SDK-visible types). See [typespec_generation_issues_service_review.md](./typespec_generation_issues_service_review.md) for full evidence.
 
-| Service area | Decisions | TSPs | Affected API versions |
-|---|---:|---|---|
-| [Compute](#compute) | 1 | [TSP 3](./typespec_generation_issues_service_review.md#issue-3--converter-emits-empty--body-on-computeresourcetsp-orphan-pruning-the-compute-hierarchy) | 2023-08-01-preview, 2024-01-01-preview |
-| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | 3 | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#2, #3, #4) | 2025-01-01-preview |
-| [Inference Groups](#inference-groups) | 1 | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#5) | 2025-01-01-preview |
-| [Workspace Features](#workspace-features) | 1 | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#1) | 2025-01-01-preview |
-| [Workspace Assets / Asset Reference (MFE dataplane)](#workspace-assets--asset-reference-mfe-dataplane) | 1 | [TSP 1](./typespec_generation_issues_service_review.md#issue-1--2021-10-01-dataplanepreview-assetreferencebasereferencetype-discriminator-collision) | 2021-10-01-dataplanepreview |
-| [Data Import / Data Assets](#data-import--data-assets) | 1 | [TSP 2](./typespec_generation_issues_service_review.md#issue-2--2023-04-01-preview--2023-06-01-preview--2024-04-01-preview-dataversionbasepropertiesdatatype-discriminator-collision) | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview |
+| Service area | TSPs | Affected API versions |
+|---|---|---|
+| [Compute](#compute) | [TSP 3](./typespec_generation_issues_service_review.md#issue-3--converter-emits-empty--body-on-computeresourcetsp-orphan-pruning-the-compute-hierarchy) | 2023-08-01-preview, 2024-01-01-preview |
+| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#2, #3, #4) | 2025-01-01-preview |
+| [Inference Groups](#inference-groups) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#5) | 2025-01-01-preview |
+| [Workspace Features](#workspace-features) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#1) | 2025-01-01-preview |
+| [Workspace Assets / Asset Reference (MFE dataplane)](#workspace-assets--asset-reference-mfe-dataplane) | [TSP 1](./typespec_generation_issues_service_review.md#issue-1--2021-10-01-dataplanepreview-assetreferencebasereferencetype-discriminator-collision) | 2021-10-01-dataplanepreview |
+| [Data Import / Data Assets](#data-import--data-assets) | [TSP 2](./typespec_generation_issues_service_review.md#issue-2--2023-04-01-preview--2023-06-01-preview--2024-04-01-preview-dataversionbasepropertiesdatatype-discriminator-collision) | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview |
 
 **7 TSP-blocking decisions across 6 service areas.**
 
@@ -23,11 +23,11 @@ These are the decisions that **require service-team input** to unblock the TypeS
 
 The deltas below are spec-vs-local-swagger drift the SDK currently relies on. They do **not** block the TypeSpec migration on their own — for each one, the SDK can absorb the regen by adjusting the entity layer (the local back-port is the workaround). Listed here for completeness; the migration does not need to wait on the service team to resolve them. See [typespec_deltas_service_review.md](./typespec_deltas_service_review.md) for full evidence.
 
-| Service area | Items | Deltas | Affected API versions |
-|---|---:|---|---|
-| [Workspace Connections / Credentials](#workspace-connections--credentials) | 2 | [Delta 1](./typespec_deltas_service_review.md#delta-1--2022-01-01-preview-workspace-connection-auth-credentials), [Delta 5](./typespec_deltas_service_review.md#delta-5--2024-04-01-preview-accountkeyauthtypeworkspaceconnectionpropertiescredentials-shape-disagreement) | 2022-01-01-preview, 2024-04-01-preview |
-| [Registry](#registry) | 2 | [Delta 2](./typespec_deltas_service_review.md#delta-2--2022-10-01-preview-registry-user-supplied-storage--acr), [Delta 3](./typespec_deltas_service_review.md#delta-3--2022-10-01-preview-registrymanagedresourcegrouptags) | 2022-10-01-preview |
-| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | 1 | [Delta 4](./typespec_deltas_service_review.md#delta-4--2024-04-01-preview-azure-openai-endpoint-deployment) | 2024-04-01-preview |
+| Service area | Deltas | Affected API versions |
+|---|---|---|
+| [Workspace Connections / Credentials](#workspace-connections--credentials) | [Delta 1](./typespec_deltas_service_review.md#delta-1--2022-01-01-preview-workspace-connection-auth-credentials), [Delta 5](./typespec_deltas_service_review.md#delta-5--2024-04-01-preview-accountkeyauthtypeworkspaceconnectionpropertiescredentials-shape-disagreement) | 2022-01-01-preview, 2024-04-01-preview |
+| [Registry](#registry) | [Delta 2](./typespec_deltas_service_review.md#delta-2--2022-10-01-preview-registry-user-supplied-storage--acr), [Delta 3](./typespec_deltas_service_review.md#delta-3--2022-10-01-preview-registrymanagedresourcegrouptags) | 2022-10-01-preview |
+| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | [Delta 4](./typespec_deltas_service_review.md#delta-4--2024-04-01-preview-azure-openai-endpoint-deployment) | 2024-04-01-preview |
 
 **5 deltas across 3 service areas.**
 
