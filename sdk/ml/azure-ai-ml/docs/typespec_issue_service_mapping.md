@@ -11,9 +11,9 @@ These are the decisions that **require service-team input** to unblock the TypeS
 | Service area | TSPs | Affected API versions | Ticket to Service team |
 |---|---|---|---|
 | [Compute](#compute) | [TSP 3](./typespec_generation_issues_service_review.md#issue-3--converter-emits-empty--body-on-computeresourcetsp-orphan-pruning-the-compute-hierarchy) | 2023-08-01-preview, 2024-01-01-preview | [816303994](https://portal.microsofticm.com/imp/v5/incidents/details/816303994/summary) |
-| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#2, #3, #4) | 2025-01-01-preview | |
-| [Inference Groups](#inference-groups) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#5) | 2025-01-01-preview | |
-| [Workspace Features](#workspace-features) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#1) | 2025-01-01-preview | |
+| [Workspace Endpoints / Deployments](#workspace-endpoints--deployments) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#2, #3, #4) | 2025-01-01-preview | N/A |
+| [Inference Groups](#inference-groups) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#5) | 2025-01-01-preview | N/A |
+| [Workspace Features](#workspace-features) | [TSP 4](./typespec_generation_issues_service_review.md#issue-4--2025-01-01-preview-sibling-interface-route-conflict-duplicate-operation) (#1) | 2025-01-01-preview | N/A |
 | [Workspace Assets / Asset Reference (MFE dataplane)](#workspace-assets--asset-reference-mfe-dataplane) | [TSP 1](./typespec_generation_issues_service_review.md#issue-1--2021-10-01-dataplanepreview-assetreferencebasereferencetype-discriminator-collision) | 2021-10-01-dataplanepreview | |
 | [Data Import / Data Assets](#data-import--data-assets) | [TSP 2](./typespec_generation_issues_service_review.md#issue-2--2023-04-01-preview--2023-06-01-preview--2024-04-01-preview-dataversionbasepropertiesdatatype-discriminator-collision) | 2023-04-01-preview, 2023-06-01-preview, 2024-04-01-preview | |
 
