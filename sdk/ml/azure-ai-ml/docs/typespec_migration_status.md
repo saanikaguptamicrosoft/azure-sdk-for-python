@@ -2,13 +2,13 @@
 
 | # | API version | Status | PR link | Comment | Test links |
 |---|---|---|---|---|---|
-| 1 | 2020-09-01-dataplanepreview | To-do | https://github.com/Azure/azure-sdk-for-python/pull/47392 | TSP added: https://github.com/Azure/azure-rest-api-specs/pull/43817 but pushed to new branch: azure-ai-ml/legacy-api-versions/typespec | https://github.com/Azure/azureml-examples/pull/4024 (refer [main](https://github.com/Azure/azureml-examples/pull/3995))|
+| 1 | 2020-09-01-dataplanepreview | To-do | - | ||
 | 2 | 2021-10-01-dataplanepreview | To-do | — |  ||
 | 3 | 2022-01-01-preview | ✅ Merged | https://github.com/Azure/azure-sdk-for-python/pull/47554 | Re-used existing client by passing API version as an arg, and for missing models passed json directly | https://github.com/Azure/azureml-examples/pull/4045 (refer [main](https://github.com/Azure/azureml-examples/pull/4042)) |
 | 4 | 2022-02-01-preview | ✅ Merged | https://github.com/Azure/azure-sdk-for-python/pull/47554 | Re-used existing client by passing API version as an arg, and for missing models passed json directly | https://github.com/Azure/azureml-examples/pull/4045 (refer [main](https://github.com/Azure/azureml-examples/pull/4042))|
 | 5 | 2022-10-01-preview | To-do | — |  ||
 | 6 | 2022-12-01-preview | To-do | — | Convergence into row 5 (v2022-10) ||
-| 7 | 2023-02-01-preview | To-do | https://github.com/Azure/azure-sdk-for-python/pull/47392 | TSP added: https://github.com/Azure/azure-rest-api-specs/pull/43817 but pushed to new branch: azure-ai-ml/legacy-api-versions/typespec | https://github.com/Azure/azureml-examples/pull/4024 (refer [main](https://github.com/Azure/azureml-examples/pull/3995))|
+| 7 | 2023-02-01-preview | To-do | - |  | |
 | 8 | 2023-04-01-preview | To-do | — |  ||
 | 9 | 2023-06-01-preview | To-do | — |  ||
 | 10 | 2023-08-01-preview | To-do | — |  ||
