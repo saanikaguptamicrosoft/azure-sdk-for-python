@@ -26,6 +26,7 @@ Steps:
 import pytest
 
 from azure.ai.ml import MLClient, command
+from azure.ai.ml.dsl import pipeline
 from azure.ai.ml.entities import CronTrigger, JobSchedule, RecurrencePattern, RecurrenceTrigger
 from azure.core.exceptions import HttpResponseError
 
@@ -33,12 +34,22 @@ _CURATED_ENV = "azureml://registries/azureml/environments/sklearn-1.5/labels/lat
 
 
 def _trivial_job():
-    """A minimal command job used only as the schedule's target (never actually run here)."""
-    return command(
+    """A minimal single-step pipeline job used only as the schedule's target (never actually run here).
+
+    Schedules accept a ``PipelineJob`` (a bare ``CommandJob`` is only allowed under private preview),
+    so the trivial command is wrapped in a serverless DSL pipeline.
+    """
+    step = command(
         command="echo scheduled hello",
         environment=_CURATED_ENV,
-        display_name="scenario-scheduled-job",
+        display_name="scenario-scheduled-step",
     )
+
+    @pipeline(name="scenario-scheduled-pipeline", default_compute="serverless")
+    def _sched_pipeline():
+        step()
+
+    return _sched_pipeline()
 
 
 class TestScenarioScheduleTrigger:
