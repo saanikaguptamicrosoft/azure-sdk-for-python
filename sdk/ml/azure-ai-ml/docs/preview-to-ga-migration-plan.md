@@ -44,6 +44,11 @@ Every request the SDK sends to the Machine Learning service must use a **current
 
 There are two categories of places to fix. Both are inside `sdk/ml/azure-ai-ml/azure/ai/ml/`.
 
+> **Quick glossary before we dive in.**
+> - *Control-plane* = requests to `https://management.azure.com/...` that manage Azure resources (create a workspace, list jobs, etc.). One shared client for `azure-ai-ml`: `arm_ml_service`.
+> - *Data-plane* = requests to a workspace-specific endpoint (`https://<region>.api.azureml.ms/...`) that operate on data inside a workspace (upload a dataset, read run history, etc.). There are several separate clients for these, one per data-plane surface.
+> - Both planes have their own API version strings. Both are in scope if the version is a preview and belongs to the Machine Learning service.
+
 ### Category A — Requests currently sent with a preview API version query string
 
 The SDK has a shared client called `arm_ml_service` (a TypeSpec-generated Python client) whose default API version is `2025-12-01` (GA). In several places we override that default and send a preview API version instead. The override is a single line that looks like this:
@@ -65,7 +70,7 @@ This is **not a proven-complete list**. The vendor team will need to run the gre
 ### Out of scope
 
 - The 4 non-preview GA overrides in `_ml_client.py` (`2022-05-01`, `2022-10-01`, `2023-04-01`, `2023-10-01`). These are on supported API versions and get 24-month deprecation notice under Azure's API version policy — they are not the fire.
-- The semantic-versioned data-plane clients: `dataset_dataplane` (`1.5.0`), `model_dataplane` (`1.0.0`), `runhistory` (`v1.0`), `registry_discovery` (`v1.0`). These use a different lifecycle policy from the preview convention. Confirm with William before touching them.
+- The semantic-versioned data-plane clients: `dataset_dataplane` (`1.5.0`), `model_dataplane` (`1.0.0`), `runhistory` (`v1.0`), `registry_discovery` (`v1.0`). These do not use the ARM date-based preview convention and appear to be under a different lifecycle. **Tentatively** out of scope — see Investigation Item 2 in Section 10; if William confirms they are also on a limited-support clock, they move into scope.
 - Preview API version strings that target OTHER Azure services (`Microsoft.Resources` deployment validation at `entities/_validation/remote.py:133`, and `Microsoft.Resources` generic resource lookups in `_utils/azure_resource_utils.py` and `operations/_virtual_cluster_operations.py`). Different service, different owner.
 
 ---
@@ -78,7 +83,7 @@ Getting there realistically requires waiting on service-team work. We should exp
 
 **State 0 — today.** SDK depends on unsupported preview API versions. Some fields/operations have no equivalent in the current GA schema.
 
-**State 1 — intermediate.** For each field/operation missing from the current GA schema, the service team adds it to a **new preview API version** (this is the normal Azure convention; graduating straight to GA is rare on a first ask). The SDK moves off the unsupported preview versions and onto the new *supported* preview version. Overrides are still in `_ml_client.py`, but they now point at API versions that are within the 18-month support window.
+**State 1 — intermediate.** For each field/operation missing from the current GA schema, the service team adds it to a **new preview API version** (this is the normal Azure convention; graduating straight to GA is rare on a first ask). The SDK moves off the unsupported preview versions and onto the new preview version, which is still within its 18-month support window at the time of the move. Overrides are still in `_ml_client.py`, but they now point at API versions the service actively supports.
 
 **State 2 — final.** The service team graduates the feature into a new GA API version. TypeSpec regenerates. The SDK drops every override, removes all Category B custom code, and uses the generated model classes normally.
 
@@ -120,10 +125,13 @@ git grep -nE '\["[a-z][a-zA-Z0-9]+"\]\s*=' sdk/ml/azure-ai-ml/azure/ai/ml/entiti
 
 Filter the results to hits inside `_to_rest_object` methods or private helpers those methods call.
 
-**Pattern B-2: `_to_rest_object` returning a plain dict.** Grep methods returning a `dict(...)` or `{...}` literal instead of a rest model. Command:
+**Pattern B-2: `_to_rest_object` returning a plain dict.** Some methods return a `dict(...)` or `{...}` literal instead of a rest model. Command (PowerShell):
 
 ```powershell
-git grep -nB2 -A5 "def _to_rest_object" sdk/ml/azure-ai-ml/azure/ai/ml/entities | Select-String -Pattern "return \{|return dict\("
+Get-ChildItem sdk/ml/azure-ai-ml/azure/ai/ml/entities -Recurse -Filter *.py |
+  Select-String -Pattern "def _to_rest_object" -Context 0,8 |
+  Where-Object { $_.Context.PostContext -match "return \{|return dict\(" } |
+  ForEach-Object { "{0}:{1}" -f $_.Path, $_.LineNumber }
 ```
 
 Combine both lists into a working inventory of Category B hits.
@@ -134,7 +142,7 @@ For a Category A hit, the wire body is whatever the generated model at that call
 
 For a Category B hit, the wire body is whatever the hand-built dict emits. Copy each field name (including nested paths).
 
-Then compare against `2025-12-01`. The canonical schema for `2025-12-01` lives in the TypeSpec source at `specification/machinelearningservices/MachineLearningServices.Management/` in [`Azure/azure-rest-api-specs`](https://github.com/Azure/azure-rest-api-specs) at commit `bce80108d7ce39dccc1e9c2df1b1bd99d018bf7f` (per `sdk/ml/azure-ai-ml/azure/ai/ml/_restclient/arm_ml_service/tsp-location.yaml`). A field-by-field comparison against the operation's model in that TypeSpec source answers whether the current GA schema already covers this hit.
+Then compare against `2025-12-01`. The canonical schema for `2025-12-01` lives in the TypeSpec source at `specification/machinelearningservices/MachineLearningServices.Management/` in [`Azure/azure-rest-api-specs`](https://github.com/Azure/azure-rest-api-specs). To find the exact commit the SDK is currently pinned to, read `sdk/ml/azure-ai-ml/azure/ai/ml/_restclient/arm_ml_service/tsp-location.yaml` at execution time — it may have moved forward since this plan was written. A field-by-field comparison against the operation's model in that TypeSpec source answers whether the current GA schema already covers this hit.
 
 For each hit, produce one of three verdicts:
 
@@ -151,7 +159,7 @@ For each Green hit, in a separate PR:
 3. Verify the request bytes on the wire are still what the service expects. Options:
    - Preferred: re-record the affected end-to-end tests against a live workspace and compare recordings. Recording infrastructure lives in `tests/**/e2etests/`; ask Kashif or the ML SDK team for the correct playback/live workflow.
    - Alternative: build the same entity on `main` and on the branch, serialize both to the wire (`json.dumps(entity._to_rest_object(), cls=SdkJSONEncoder, exclude_readonly=True)` for arm hybrid models), diff the JSON. This is an offline check — good for a quick sanity read, but does not catch response-side differences.
-4. Add a one-line entry to `CHANGELOG.md` under the current unreleased section, in the "Other Changes" group. Example wording: *"Migrated <feature area> off the `<api-version>` preview API version onto the current GA."*
+4. Add a one-line entry to `sdk/ml/azure-ai-ml/CHANGELOG.md` under the current unreleased section, in the "Other Changes" group. Example wording: *"Migrated <feature area> off the `<api-version>` preview API version onto the current GA."*
 5. **One PR per hit** so reviewers can inspect changes independently and revert cleanly if a regression appears.
 
 ### Step 6 — Handle the Amber and Red hits
@@ -228,8 +236,10 @@ Location: `azure/ai/ml/_ml_client.py`
 | 102 | `ServiceClient082023Preview` | `2023-08-01-preview` | 5,936,403 |
 | 103 | `ServiceClient012025Preview` | `2025-01-01-preview` | 536,787 |
 | 104 | `ServiceClient102024PreviewTsp` | `2024-10-01-preview` | 1,090,085 |
-| 108 | `ServiceClient042024PreviewArm` | `2024-04-01-preview` | (shared with A3 below) |
+| 108 | `ServiceClient042024PreviewArm` | `2024-04-01-preview` | not in top-visible rows of the snapshot |
 | 112 | `ServiceClient012024PreviewArm` | `2024-01-01-preview` | 8,731,670 |
+
+> Note on Kusto scope: the `AwesomeRequests` query covers ML control-plane traffic only (requests to `management.azure.com/.../Microsoft.MachineLearningServices/...`). Data-plane traffic (Category A2 and A3) is served by a different endpoint and would not appear in this table, so its absence there is expected, not evidence of no usage. The vendor team should ask William for the equivalent data-plane query when execution starts.
 
 ### Category A2 — data-plane clients whose default is a preview API version
 
