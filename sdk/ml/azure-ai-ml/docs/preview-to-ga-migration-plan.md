@@ -39,7 +39,7 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
 ## 6. Invariants
 
-- **SDK code stays TypeSpec-aligned.** Custom JSON payloads (Category B) are only acceptable as a short-lived bridge between service adding a schema and the SDK regenerating from the new TypeSpec. Never as a permanent workaround.
+- **SDK code stays TypeSpec-aligned.** No custom JSON is added to work around missing schema. Existing custom JSON (Category B) is removed when the SDK regenerates from a supported API version that includes the missing fields.
 - No changes to non-preview API version usage.
 - Every PR under this project adds an entry to `sdk/ml/azure-ai-ml/CHANGELOG.md` in the current unreleased section.
 - Any customer-visible SDK API change requires PM sign-off and a major version bump.
@@ -54,6 +54,12 @@ Every surface change should be validated against the same test surfaces we used 
 - Notebook sample runs in the `azureml-examples` repository, compared against a `main`-branch baseline.
 
 ## Appendix — Category A surfaces
+
+This list came from a quick scan of the codebase to help with initial effort estimation — not a definitive scope. Before starting execution, the task owner should:
+
+- Re-scan the codebase to confirm the list is exhaustive (no preview API version usage missed).
+- Confirm with William Baumann (`wbaumann`) which of these versions are still being served vs. already retired.
+- Cross-reference the deeper analysis docs for the historical picture: [Saanika's TypeSpec-migration analysis docs](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/tree/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs) and Pratibha's [typespec_migration_plan.md](https://github.com/PratibhaShrivastav18/azure-sdk-for-python/blob/shrivastavp/typespec-migration-plan/sdk/ml/azure-ai-ml/docs/typespec_migration_plan.md).
 
 Verified against `main` at commit `3f504a1e15` (Aug 24 2026). Kusto counts below are from William's July 2026 snapshot. To pull current numbers, run this query in the Vienna cluster (`viennausc.kusto.windows.net`, `Vienna` database):
 
