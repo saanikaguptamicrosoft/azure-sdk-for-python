@@ -10,7 +10,7 @@ Kusto snapshot from William (July 2026) shows approximately 20 million requests 
 
 ## 2. Goal
 
-Every request `azure-ai-ml` sends to the Machine Learning service uses a currently supported GA API version.
+`azure-ai-ml` no longer sends requests to unsupported preview API versions of the Machine Learning service. Every request uses either the current GA API version, or a currently supported preview when a needed feature has not yet been graduated to GA.
 
 ## 3. Non-goals
 
