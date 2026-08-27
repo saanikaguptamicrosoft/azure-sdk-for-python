@@ -32,6 +32,8 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
 ## 5. Approach
 
+Before starting, confirm the actual scope of preview API version usage per the appendix note — re-scan the codebase, and check with William Baumann which versions are still being served vs. already retired.
+
 1. For each surface, check whether the current GA schema (`2025-12-01` for `arm_ml_service`, or the latest GA of the affected data-plane TypeSpec) covers the wire the SDK sends today. If yes, this is not a gap — the preview override can be dropped, and any related custom JSON removed at the next TypeSpec regen. If no, this is a gap — proceed to step 2.
 2. For gaps, collate a single ask per affected service team requesting the missing fields or operations be added in their next API version.
 3. Service most likely ships to a new preview version first. When it lands, regenerate the SDK's TypeSpec-generated client from that new preview and drop the previously-existing overrides — the SDK's default now becomes the new preview.
@@ -39,7 +41,7 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
 ## 6. Invariants
 
-- **SDK code stays TypeSpec-aligned.** No custom JSON is added to work around missing schema. Existing custom JSON (Category B) is removed when the SDK regenerates from a supported API version that includes the missing fields.
+- **SDK code stays TypeSpec-aligned.** No custom JSON is added to work around missing schema. Once the SDK regenerates from a supported API version that includes the previously-missing fields, the corresponding custom JSON in the entity files is replaced with calls to the newly-available generated model classes.
 - No changes to non-preview API version usage.
 - Every PR under this project adds an entry to `sdk/ml/azure-ai-ml/CHANGELOG.md` in the current unreleased section.
 - Any customer-visible SDK API change requires PM sign-off and a major version bump.
