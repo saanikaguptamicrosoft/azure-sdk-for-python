@@ -41,7 +41,7 @@ Before starting, confirm the actual scope of preview API version usage per the a
 
 ## 6. Invariants
 
-- **SDK code stays TypeSpec-aligned.** No custom JSON is added to work around missing schema. Once the SDK regenerates from a supported API version that includes the previously-missing fields, the corresponding custom JSON in the entity files is replaced with calls to the newly-available generated model classes.
+- **SDK code stays TypeSpec-aligned.** No custom JSON is added to work around missing schema. When a TypeSpec regen makes the previously-missing fields available in the generated model classes, we manually update the affected entity files to use them and delete the custom JSON.
 - No changes to non-preview API version usage.
 - Every PR under this project adds an entry to `sdk/ml/azure-ai-ml/CHANGELOG.md` in the current unreleased section.
 - Any customer-visible SDK API change requires PM sign-off and a major version bump.
