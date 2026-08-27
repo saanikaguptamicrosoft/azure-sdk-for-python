@@ -29,15 +29,13 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 **Out of scope:**
 
 - Non-preview API version overrides in `_ml_client.py` (`2022-05-01`, `2022-10-01`, `2023-04-01`, `2023-10-01`). These are on supported GA versions.
-- Semantic-versioned data-plane clients (`dataset_dataplane`, `model_dataplane`, `runhistory`, `registry_discovery`) — different lifecycle, tentatively out of scope pending confirmation with William.
-- Preview API version strings targeting other Azure services (`Microsoft.Resources`).
 
 ## 5. Approach
 
-1. For each surface, check whether the current supported GA API version (`2025-12-01`, or the latest GA of the affected data-plane TypeSpec) already covers the wire. If yes, drop the preview override — no service-team work needed.
+1. For each surface, check whether the current GA schema (`2025-12-01` for `arm_ml_service`, or the latest GA of the affected data-plane TypeSpec) covers the wire the SDK sends today. If yes, this is not a gap — the preview override can be dropped, and any related custom JSON removed at the next TypeSpec regen. If no, this is a gap — proceed to step 2.
 2. For gaps, collate a single ask per affected service team requesting the missing fields or operations be added in their next API version.
 3. Service most likely ships to a new preview version first. When it lands, regenerate the SDK's TypeSpec-generated client from that new preview and drop the previously-existing overrides — the SDK's default now becomes the new preview.
-4. When the service graduates the feature into a new GA, regenerate the TypeSpec-generated client from that GA version. Assuming the service carries the fields forward from preview into GA, this should work with no additional SDK changes.
+4. When the service graduates the feature into a new GA, regenerate the TypeSpec-generated client from that GA version. Assuming the service carries the fields forward from preview into GA, the only SDK-side work should be updating the affected end-to-end test recordings for the new API version query string.
 
 ## 6. Invariants
 
@@ -57,7 +55,17 @@ Every surface change should be validated against the same test surfaces we used 
 
 ## Appendix — Category A surfaces
 
-Verified against `main` at commit `3f504a1e15` (Aug 24 2026). Kusto counts are from William's July 2026 snapshot.
+Verified against `main` at commit `3f504a1e15` (Aug 24 2026). Kusto counts below are from William's July 2026 snapshot. To pull current numbers, run this query in the Vienna cluster (`viennausc.kusto.windows.net`, `Vienna` database):
+
+```kql
+AwesomeRequests
+| where timestamp > ago(1d)
+| where customDimensions ["x-ms-user-agent"] startswith "azure-ai-ml"
+| parse url with * "api-version=" apiVersion
+| extend apiVersion = tostring(split(apiVersion, "&", 0))
+| summarize count() by apiVersion
+| order by count_ desc
+```
 
 **In `azure/ai/ml/_ml_client.py`:**
 
