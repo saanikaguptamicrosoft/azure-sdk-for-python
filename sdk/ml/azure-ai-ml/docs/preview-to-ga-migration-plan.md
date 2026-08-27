@@ -15,7 +15,6 @@ Every request `azure-ai-ml` sends to the Machine Learning service uses a current
 ## 3. Non-goals
 
 - Not changing how the SDK talks to Azure services other than the Machine Learning service.
-- Not regenerating the shared TypeSpec-generated client `arm_ml_service` as part of this project (that's separate maintenance).
 - Not expected to reduce SDK size meaningfully. The big size drop happened in the previous TypeSpec migration when per-version rest-client folders were consolidated. This project is a supportability play, not a size play.
 - No customer-visible SDK API changes without PM sign-off. If service graduation forces any, a major version bump follows per Kashif's guidance.
 
@@ -49,8 +48,12 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
 ## 7. Validation
 
-- Run existing unit tests and end-to-end tests for each affected feature area.
-- End-to-end recordings need updating for each affected surface because the API version query string changes. The request/response bodies should otherwise be unchanged, so recording updates are typically mechanical.
+Every surface change should be validated against the same test surfaces we used in the previous `arm_ml_service` migration ([PR #47787](https://github.com/Azure/azure-sdk-for-python/pull/47787) has a worked example):
+
+- Unit tests under `tests/<area>/unittests/`.
+- Serialization smoke tests under `tests/smoke_serialization/` (guard against silent wire drift on entity `_to_rest_object()` methods).
+- End-to-end recorded tests under `tests/<area>/e2etests/`. Recordings need updating for each affected surface because the API version query string changes; request and response bodies should otherwise be unchanged, so recording updates are typically mechanical.
+- Notebook sample runs in the `azureml-examples` repository, compared against a `main`-branch baseline.
 
 ## Appendix — Category A surfaces
 
