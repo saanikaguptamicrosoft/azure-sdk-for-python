@@ -28,7 +28,7 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
 **Out of scope:**
 
-- Non-preview API version overrides in `_ml_client.py` (`2022-05-01`, `2022-10-01`, `2023-04-01`, `2023-10-01`). These are on supported GA versions.
+- Non-preview API version overrides in `_ml_client.py` (`2022-05-01`, `2022-10-01`, `2023-04-01`, `2023-10-01`). These are on supported GA versions. William Baumann confirmed (Aug 27 2026) that old GA versions persist indefinitely; a sunset would follow a typical 3-year deprecation process.
 
 ## 5. Approach
 
