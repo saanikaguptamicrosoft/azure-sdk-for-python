@@ -4,9 +4,11 @@
 
 ## 1. Background
 
-`azure-ai-ml` currently sends requests to the Machine Learning service using several preview API versions that are more than 18 months old. Per an email thread with William Baumann (June 2026), the service team no longer supports these versions and they can be removed at any time.
+`azure-ai-ml` currently sends requests to the Machine Learning service using several preview API versions that are more than 18 months old. Per an email thread with William Baumann (June 2026), the service team no longer supports these versions by choice.
 
 Kusto snapshot from William (July 2026) shows approximately 20 million requests per day going to these preview API versions — a real production dependency. If the service removes any of them, every SDK customer using the affected feature breaks.
+
+Note: Guarantee of preview APIs is 6 months - 1 year. While GA versions persist indefinitely. If service team wants to sunset a GA version, it typically takes a 3-year deprecation process.
 
 ## 2. Goal
 
@@ -104,3 +106,14 @@ AwesomeRequests
 | `azure/ai/ml/operations/_index_operations.py:120` | `2024-04-01-preview` |
 
 Kusto's `AwesomeRequests` table covers Machine Learning control-plane traffic only, so data-plane numbers do not appear there.
+
+**Links discussed in KT:**
+- Autorest to Typespec Migration docs: https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/blob/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs/typespec_migration_status.md
+  - KT: https://microsoftapc-my.sharepoint.com/personal/mohlnu_microsoft_com/_layouts/15/stream.aspx?id=%2Fpersonal%2Fmohlnu%5Fmicrosoft%5Fcom%2FDocuments%2FRecordings%2FKnowledge%20cafe%2D20260630%5F150633%2DMeeting%20Recording%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E0f8885f4%2D69b5%2D43d7%2Db5b2%2D7f58ef944548&share=cQqMvuQABpibR6rwJ%2D96zC08EgUCMK66pTvJYNOACNmFNeQaZQ
+- Code walkthrough
+  - https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ml/azure-ai-ml/azure/ai/ml/_restclient/arm_ml_service/_configuration.py#L36
+  - https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ml/azure-ai-ml/azure/ai/ml/_ml_client.py#L108
+  - https://github.com/Azure/azure-rest-api-specs/tree/main/specification/machinelearningservices/MachineLearningServices.Management
+  - https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ml/azure-ai-ml/azure/ai/ml/_restclient/arm_ml_service/tsp-location.yaml
+  - https://github.com/Azure/azure-rest-api-specs/blob/main/specification/machinelearningservices/MachineLearningServices.Management/main.tsp
+- TSP to client generation docs: https://azure.github.io/typespec-azure/docs/howtos/generate-with-tsp-client/intro_tsp_client/
