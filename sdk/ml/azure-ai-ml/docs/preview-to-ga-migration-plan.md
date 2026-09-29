@@ -60,6 +60,7 @@ Every surface change should be validated against the same test surfaces we used 
 - Serialization smoke tests under `tests/smoke_serialization/` (guard against silent wire drift on entity `_to_rest_object()` methods).
 - End-to-end recorded tests under `tests/<area>/e2etests/`. Recordings need updating for each affected surface because the API version query string changes; request and response bodies should otherwise be unchanged, so recording updates are typically mechanical.
 - Notebook sample runs in the `azureml-examples` repository, compared against a `main`-branch baseline.
+- Scenario tests
 
 ## Appendix — Category A surfaces
 
