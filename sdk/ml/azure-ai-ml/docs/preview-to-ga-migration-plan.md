@@ -113,7 +113,7 @@ Kusto's `AwesomeRequests` table covers Machine Learning control-plane traffic on
 
 ## Links discussed in KT
 - [Autorest to Typespec Migration docs](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/blob/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs/typespec_migration_status.md)
-  - [KT](https://microsoftapc-my.sharepoint.com/personal/mohlnu_microsoft_com/_layouts/15/stream.aspx?id=%2Fpersonal%2Fmohlnu%5Fmicrosoft%5Fcom%2FDocuments%2FRecordings%2FKnowledge%20cafe%2D20260630%5F150633%2DMeeting%20Recording%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E0f8885f4%2D69b5%2D43d7%2Db5b2%2D7f58ef944548&share=cQqMvuQABpibR6rwJ%2D96zC08EgUCMK66pTvJYNOACNmFNeQaZQ)
+  - [KT](https://microsoftapc-my.sharepoint.com/personal/mohlnu_microsoft_com/_layouts/15/stream.aspx?id=%2Fpersonal%2Fmohlnu%5Fmicrosoft%5Fcom%2FDocuments%2FRecordings%2FKnowledge%20cafe%2D20260630%5F150633%2DMeeting%20Recording%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E0f8885f4%2D69b5%2D43d7%2Db5b2%2D7f58ef944548&share=cQqMvuQABpibR6rwJ%2D96zC08EgUCMK66pTvJYNOACNmFNeQaZQ) ([ppt](https://microsoftapc-my.sharepoint.com/:p:/g/personal/saanikagupta_microsoft_com/cQoFHONdikh4S5Vpj_3qCBuJEgUCXnfLfbOcxcrtzEg6X6IgOw))
 - Code walkthrough
   - [Default API version setting example](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ml/azure-ai-ml/azure/ai/ml/_restclient/arm_ml_service/_configuration.py#L36)
   - [Overriding default API version example](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ml/azure-ai-ml/azure/ai/ml/_ml_client.py#L108)
