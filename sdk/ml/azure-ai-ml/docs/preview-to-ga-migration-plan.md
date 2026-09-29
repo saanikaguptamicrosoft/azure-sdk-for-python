@@ -61,19 +61,14 @@ Every surface change should be validated against the same test surfaces we used 
 - End-to-end recorded tests under `tests/<area>/e2etests/`. Recordings need updating for each affected surface because the API version query string changes; request and response bodies should otherwise be unchanged, so recording updates are typically mechanical.
 - Notebook sample runs in the `azureml-examples` repository, compared against a `main`-branch baseline.
 
-## Appendix — Starting points for preview API analysis
+## Appendix — Category A surfaces
 
-The tables below are an initial inventory of preview API-version settings found in the SDK, provided to guide the analysis. They are not an exhaustive list or a final decision on which versions need migration. They cover both ARM overrides and separate data-plane defaults and overrides.
+This list came from a quick scan of the codebase to help with initial effort estimation — not a definitive scope. Before starting execution, the task owner should:
 
-Use [Saanika's TypeSpec migration status](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/blob/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs/typespec_migration_status.md), the [supporting analysis](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/tree/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs), and [Pratibha's original migration plan](https://github.com/PratibhaShrivastav18/azure-sdk-for-python/blob/shrivastavp/typespec-migration-plan/sdk/ml/azure-ai-ml/docs/typespec_migration_plan.md) for historical context. Those documents describe earlier clients and available TypeSpec versions, which may differ from the versions selected by the SDK today. For example, a version listed as available in TypeSpec is not necessarily used by an SDK operation.
+- Re-scan the codebase to confirm the list is exhaustive (no preview API version usage missed).
+- Cross-reference the deeper analysis docs for the historical picture: [Saanika's TypeSpec-migration analysis docs](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/tree/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs) and Pratibha's [typespec_migration_plan.md](https://github.com/PratibhaShrivastav18/azure-sdk-for-python/blob/shrivastavp/typespec-migration-plan/sdk/ml/azure-ai-ml/docs/typespec_migration_plan.md).
 
-Before implementation, the task owner should:
-
-- Refresh the inventory from the current code, tracing each setting to the operations that use it and checking for additional preview dependencies.
-- For each dependency, identify the service contract, supported target version, and any feature or behavior gaps. Use William's existing ARM support confirmation; do not assume the same lifecycle or GA target applies to separate data-plane services.
-- Use those findings to finalize the migration scope and update this inventory. A preview version's presence here does not by itself establish that it is unsupported or ready to move to GA.
-
-The initial code snapshot was `main` at commit `3f504a1e15` (Aug 24 2026); file locations, line numbers, and selected versions should be rechecked. Kusto counts below are from William's July 2026 snapshot and show usage, not support status. To pull current control-plane numbers, run this query in the Vienna cluster (`viennausc.kusto.windows.net`, `Vienna` database):
+Verified against `main` at commit `3f504a1e15` (Aug 24 2026). Kusto counts below are from William's July 2026 snapshot. To pull current numbers, run this query in the Vienna cluster (`viennausc.kusto.windows.net`, `Vienna` database):
 
 ```kql
 AwesomeRequests
@@ -85,7 +80,7 @@ AwesomeRequests
 | order by count_ desc
 ```
 
-**ARM preview overrides identified in `azure/ai/ml/_ml_client.py` (snapshot):**
+**In `azure/ai/ml/_ml_client.py`:**
 
 | Line | API version | Kusto requests / day |
 | ---: | --- | ---: |
@@ -100,14 +95,14 @@ AwesomeRequests
 | 108 | `2024-04-01-preview` | — |
 | 112 | `2024-01-01-preview` | 8,731,670 |
 
-**Data-plane client defaults identified (snapshot):**
+**Data-plane clients with a preview default:**
 
 | File | Default API version |
 | --- | --- |
 | `azure/ai/ml/_restclient/workspace_dataplane/_configuration.py` | `2023-06-01-preview` |
 | `azure/ai/ml/_restclient/azure_ai_assets_v2024_04_01/azureaiassetsv20240401/_configuration.py` | `2026-05-01-preview` |
 
-**Data-plane operation override identified (snapshot):**
+**Explicit override in an operation file:**
 
 | File:line | API version |
 | --- | --- |
