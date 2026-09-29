@@ -22,11 +22,15 @@ Note: Guarantee of preview APIs is 6 months - 1 year. While GA versions persist 
 
 ## 4. Scope
 
+Preview API versions for both ARM and Dataplane Projects are in scope.
+- For ARM preview API versions, refer: [link](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/blob/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs/typespec_migration_status.md)
+- For Dataplane preview API versions refer: [link](https://github.com/PratibhaShrivastav18/azure-sdk-for-python/blob/shrivastavp/typespec-migration-plan/sdk/ml/azure-ai-ml/docs/typespec_migration_plan.md#phase-1-typespec-spec-authoring-azure-rest-api-specs-repo)
+
 Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
-**Category A — preview API version passed as a query string.** Places where the SDK overrides the default API version (`2025-12-01` GA on `arm_ml_service`) to send a preview version instead. 13 places today: 10 in `azure/ai/ml/_ml_client.py`, 2 data-plane clients whose own default is a preview version, and 1 explicit override inside an operation file. Full list in the appendix.
+**Category A — preview API version passed as a query string.** Places where the SDK overrides the default API version (`2025-12-01` GA on `arm_ml_service` is default) to send a preview version instead.
 
-**Category B — hand-built request payloads.** Places where an entity's `_to_rest_object()` method builds a raw dictionary or overrides individual JSON fields on a generated model, instead of using generated model classes. Done in the previous TypeSpec migration to preserve preview-only fields that don't exist in the current GA schema. Not enumerated here — needs identification during execution.
+**Category B — hand-built request payloads.** Places where an entity's `_to_rest_object()` method builds a raw dictionary or overrides individual JSON fields on a generated model, instead of using generated model classes. Done in the previous TypeSpec migration to preserve preview-only fields that don't exist in the current GA schema.
 
 **Out of scope:**
 
@@ -34,7 +38,7 @@ Two categories of places to fix, both inside `sdk/ml/azure-ai-ml/azure/ai/ml/`:
 
 ## 5. Approach
 
-Before starting, confirm the actual scope of preview API version usage per the appendix note — re-scan the codebase, and check with William Baumann which versions are still being served vs. already retired.
+Before starting, confirm the actual scope of preview API version usage per the appendix note — re-scan the codebase.
 
 1. For each surface, check whether the current GA schema (`2025-12-01` for `arm_ml_service`, or the latest GA of the affected data-plane TypeSpec) covers the wire the SDK sends today. If yes, this is not a gap — the preview override can be dropped, and any related custom JSON removed at the next TypeSpec regen. If no, this is a gap — proceed to step 2.
 2. For gaps, collate a single ask per affected service team requesting the missing fields or operations be added in their next API version.
@@ -62,7 +66,6 @@ Every surface change should be validated against the same test surfaces we used 
 This list came from a quick scan of the codebase to help with initial effort estimation — not a definitive scope. Before starting execution, the task owner should:
 
 - Re-scan the codebase to confirm the list is exhaustive (no preview API version usage missed).
-- Confirm with William Baumann (`wbaumann`) which of these versions are still being served vs. already retired.
 - Cross-reference the deeper analysis docs for the historical picture: [Saanika's TypeSpec-migration analysis docs](https://github.com/saanikaguptamicrosoft/azure-sdk-for-python/tree/saanika/typespec-migration-analysis/sdk/ml/azure-ai-ml/docs) and Pratibha's [typespec_migration_plan.md](https://github.com/PratibhaShrivastav18/azure-sdk-for-python/blob/shrivastavp/typespec-migration-plan/sdk/ml/azure-ai-ml/docs/typespec_migration_plan.md).
 
 Verified against `main` at commit `3f504a1e15` (Aug 24 2026). Kusto counts below are from William's July 2026 snapshot. To pull current numbers, run this query in the Vienna cluster (`viennausc.kusto.windows.net`, `Vienna` database):
